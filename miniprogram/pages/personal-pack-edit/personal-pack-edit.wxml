@@ -1,0 +1,82 @@
+<view class="edit-page">
+  <view class="page-shell safe-bottom">
+    <view class="name-panel">
+      <text class="name-panel__label type-eyebrow">PACK NAME</text>
+      <input class="name-input" value="{{name}}" maxlength="30" placeholder="例如：生物学专业英语" bindinput="inputName" />
+    </view>
+
+    <view class="method-tabs">
+      <view class="method {{method === 'paste' ? 'method--active' : ''}}" data-value="paste" bindtap="selectMethod"><text class="method__number">01</text><text>粘贴单词</text></view>
+      <view class="method {{method === 'file' ? 'method--active' : ''}}" data-value="file" bindtap="selectMethod"><text class="method__number">02</text><text>导入文件</text></view>
+      <view class="method {{method === 'manual' ? 'method--active' : ''}}" data-value="manual" bindtap="selectMethod"><text class="method__number">03</text><text>手动添加</text></view>
+    </view>
+
+    <view wx:if="{{method === 'paste'}}" class="import-panel">
+      <text class="import-guide">每行一条。只需填写正确的英文，系统会自动检索中文释义；词库未收录时也可直接附带中文。</text>
+      <textarea class="paste-area" value="{{pasteText}}" maxlength="20000" placeholder="{{pastePlaceholder}}" bindinput="inputPaste"></textarea>
+      <text class="format-hint">中英可用 -、:、：或 — 分隔；多个释义用分号分隔，也兼容 Tab 与 CSV 两列。</text>
+      <button class="button-base button-primary" loading="{{processing}}" disabled="{{processing}}" bindtap="lookupPasted">识别内容</button>
+    </view>
+
+    <view wx:elif="{{method === 'file'}}" class="import-panel file-panel">
+      <text class="file-support-label">文件格式</text>
+      <view class="file-mark">TXT<text>/</text>CSV<text>/</text>PDF</view>
+      <text class="file-title">从微信聊天选择文件</text>
+      <text class="format-hint">TXT、CSV 需为 UTF-8 且不超过 1 MB；PDF 不超过 5 MB，仅支持可复制文字的文本型文件。单次最多 1000 条。</text>
+      <view class="content-format">
+        <view class="content-format__head"><text>内容格式</text><text>每行一条</text></view>
+        <view class="content-format__row"><text class="content-format__tag">仅英文</text><text class="content-format__sample">abandon</text></view>
+        <view class="content-format__row"><text class="content-format__tag">中英对照</text><text class="content-format__sample">abandon - 放弃</text></view>
+        <view class="content-format__row"><text class="content-format__tag">Tab 两列</text><text class="content-format__sample">abandon ⇥ 放弃</text></view>
+        <view class="content-format__row"><text class="content-format__tag">CSV 两列</text><text class="content-format__sample">abandon,放弃</text></view>
+        <text class="content-format__tip">中文释义可省略，系统会自动检索；多个释义请用分号分隔。</text>
+      </view>
+      <view class="pdf-hint"><text class="pdf-hint__badge">PDF</text><text>扫描件、照片生成或加密 PDF 暂不支持 OCR。</text></view>
+      <button class="button-base button-primary" loading="{{processing}}" bindtap="chooseFile">选择文件</button>
+    </view>
+
+    <view wx:else class="import-panel manual-panel">
+      <view class="field"><text>英文单词或短语</text><view class="field__lookup"><input value="{{manualEnglish}}" placeholder="例如 ecosystem" bindinput="inputManualEnglish"/><button bindtap="lookupManual">检索</button></view></view>
+      <view wx:if="{{manualLookupText}}" class="lookup-note {{manualSystemWordId ? 'lookup-note--matched' : 'lookup-note--missing'}}">{{manualLookupText}}</view>
+      <view class="field"><text>训练释义（第一项为主要释义）</text><input value="{{manualMeaning}}" placeholder="多个释义用分号隔开" bindinput="inputManualMeaning"/></view>
+      <view class="field"><text>完整中文释义（可选）</text><textarea value="{{manualFullMeaning}}" maxlength="300" placeholder="可补充更完整的释义" bindinput="inputManualFullMeaning"></textarea></view>
+      <button class="button-base button-primary" bindtap="addManual">加入结果列表</button>
+    </view>
+
+    <view wx:if="{{processedText}}" class="process-note">{{processedText}}</view>
+
+    <view wx:if="{{totalCount}}" class="result-section">
+      <view class="result-head"><text class="result-head__title">检索结果</text><text class="result-head__valid">可保存 {{validCount}} 词</text></view>
+      <view class="stats-row">
+        <view><text>{{totalCount}}</text><text>识别单词</text></view><view><text>{{addedCount}}</text><text>新增单词</text></view><view><text>{{existingCount}}</text><text>已存在</text></view><view><text>{{mergedMeaningCount}}</text><text>合并释义</text></view><view><text>{{invalidCount}}</text><text>需要检查</text></view>
+      </view>
+      <view wx:if="{{invalidCount}}" class="issue-panel">
+        <text class="issue-panel__title">需要检查的内容</text>
+        <text class="issue-panel__desc">这些行没有被丢弃。可在下方修改后单独重试，其他有效词条不受影响。</text>
+        <textarea value="{{issueText}}" maxlength="6000" bindinput="inputIssueText"></textarea>
+        <button bindtap="retryIssues">修改后重试</button>
+      </view>
+
+      <view wx:if="{{reviewCount}}" class="review-heading">
+        <text class="review-heading__title">用户释义与待补充项</text>
+        <text class="review-heading__desc">已提供中文释义的词条可直接保存；仅空白释义需要补充。</text>
+      </view>
+      <scroll-view wx:if="{{reviewCount}}" scroll-y class="record-list" enhanced show-scrollbar="{{false}}">
+        <view wx:for="{{visibleRecords}}" wx:key="recordIndex" class="record-card">
+          <view class="record-card__head"><text class="record-number">{{item.recordIndex + 1}}</text><text class="record-status {{item.statusClass}}">{{item.statusLabel}}</text><button data-index="{{item.recordIndex}}" bindtap="removeRecord">删除</button></view>
+          <view class="record-field"><text>英文</text><input value="{{item.english}}" data-index="{{item.recordIndex}}" bindblur="editEnglish"/></view>
+          <view class="record-field"><text>主要释义 / 全部释义（分号隔开）</text><input value="{{item.fullMeaning}}" placeholder="未找到时请补充中文释义" data-index="{{item.recordIndex}}" bindblur="editMeaning"/></view>
+          <text class="record-source">来源：{{item.source === 'dictionary' ? '本地词库' : (item.source === 'user_import' ? '用户导入' : '手动编辑')}}· 共 {{item.meanings.length}} 个释义</text>
+        </view>
+      </scroll-view>
+      <view wx:else class="auto-complete-note">
+        <text class="auto-complete-note__mark">✓</text>
+        <view><text class="auto-complete-note__title">已全部自动匹配</text><text class="auto-complete-note__desc">词库已有的单词无需逐条确认，可直接保存。</text></view>
+      </view>
+      <button wx:if="{{reviewCount}}" class="list-count-hint">共 {{reviewCount}} 条待确认 · 列表内上下滑动浏览全部</button>
+    </view>
+
+    <view class="save-dock"><text>用户已填写释义的词条会直接加入当前词包</text><button class="button-base button-primary" loading="{{saving}}" disabled="{{saving || processing}}" bindtap="savePack">导入并保存</button></view>
+  </view>
+</view>
+<global-dictionary id="globalDictionary" />

@@ -1,0 +1,36 @@
+<view class="packs-page">
+  <view class="page-shell safe-bottom">
+    <view class="packs-head">
+      <view>
+        <text class="packs-head__kicker type-eyebrow">PERSONAL LIBRARY</text>
+        <text class="packs-head__title type-page-title">我的词包</text>
+        <text class="packs-head__desc type-assistive">把散落的生词，收成一组自己的练习。</text>
+      </view>
+      <button class="create-button" bindtap="createPack">＋ 新建</button>
+    </view>
+
+    <view wx:if="{{packs.length}}" class="pack-list">
+      <view wx:for="{{packs}}" wx:key="id" class="pack-card" data-id="{{item.id}}" bindtap="openPack" hover-class="pack-card--pressed">
+        <view class="pack-card__top">
+          <view class="pack-card__index">{{index + 1 < 10 ? '0' + (index + 1) : index + 1}}</view>
+          <view class="pack-card__copy">
+            <text class="pack-card__name">{{item.name}}</text>
+            <text class="pack-card__meta">{{item.wordCount}} 词 · {{item.recentText}}</text>
+          </view>
+          <text class="pack-card__arrow">›</text>
+        </view>
+        <view class="pack-card__progress-row"><text>学习进度</text><text>{{item.practicedWordCount}} / {{item.wordCount}}</text></view>
+        <view class="pack-card__track"><view class="pack-card__bar" style="width: {{item.progressPercent}}%;"></view></view>
+        <button class="pack-card__start" data-id="{{item.id}}" catchtap="openPack">开始测试</button>
+      </view>
+    </view>
+
+    <view wx:else class="empty-packs">
+      <view class="empty-packs__illustration"><text>A</text><text>词</text></view>
+      <text class="empty-packs__title type-dialog-title">还没有个人词包</text>
+      <text class="empty-packs__desc type-body">粘贴作业生词、导入 TXT / CSV，或逐个添加单词。</text>
+      <button class="button-base button-primary" bindtap="createPack">新建第一个词包</button>
+    </view>
+  </view>
+</view>
+<global-dictionary id="globalDictionary" />

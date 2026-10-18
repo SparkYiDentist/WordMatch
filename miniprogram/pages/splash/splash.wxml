@@ -1,0 +1,24 @@
+<view class="splash {{leaving ? 'splash--leaving' : ''}}">
+  <image class="splash__image" src="/assets/splash-morning-compact.jpg" mode="aspectFill" />
+  <view class="splash__shade"></view>
+
+  <view class="splash__brand-lockup">
+    <view class="splash__brand-mark">
+      <text class="splash__brand-letter splash__brand-letter--w">W</text>
+      <text class="splash__brand-letter splash__brand-letter--m">M</text>
+      <view class="splash__brand-axis"></view>
+    </view>
+    <text class="splash__brand-title type-brand">WordMatch</text>
+    <text class="splash__brand-subtitle type-body">词碰词 · 让记忆自然发生</text>
+  </view>
+
+  <view class="splash__content">
+    <view class="splash__date-row">
+      <text class="splash__date">{{dateText}}</text>
+      <text class="splash__weekday">{{weekdayText}}</text>
+    </view>
+    <view class="splash__line"></view>
+    <text class="splash__quote-en type-page-title">{{englishQuote}}</text>
+    <text class="splash__quote-zh type-body">{{chineseQuote}}</text>
+  </view>
+</view>

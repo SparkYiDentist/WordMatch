@@ -1,0 +1,24 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": ".test-build",
+    "rootDir": "miniprogram",
+    "noEmit": false
+  },
+  "include": [
+    "miniprogram/engine/**/*.ts",
+    "miniprogram/data/**/*.ts",
+    "miniprogram/services/vocabulary-service.ts",
+    "miniprogram/services/word-import.ts",
+    "miniprogram/services/pdf-import.ts",
+    "miniprogram/services/personal-word-pack.ts",
+    "miniprogram/services/storage.ts",
+    "miniprogram/services/daily-learning.ts",
+    "miniprogram/services/storage-manager.ts",
+    "miniprogram/services/search-index-service.ts",
+    "miniprogram/services/search-history-service.ts",
+    "miniprogram/services/dictionary-service.ts",
+    "miniprogram/services/dictionary-types.ts",
+    "miniprogram/components/global-dictionary/global-dictionary.ts"
+  ]
+}

@@ -1,0 +1,106 @@
+<view class="stats-page">
+  <view class="page-shell safe-bottom stats-shell">
+    <view class="page-head">
+      <text class="type-eyebrow">LEARNING RHYTHM</text>
+      <text class="type-page-title">学习日历与统计</text>
+      <text class="type-assistive">每一个色块，都是今天认真学过的证据。</text>
+    </view>
+
+    <view class="summary-grid">
+      <view class="summary-card summary-card--today">
+        <text class="summary-card__label">今日学习</text>
+        <view><text class="summary-card__number">{{todayCount}}</text><text class="summary-card__unit">词</text></view>
+      </view>
+      <view class="summary-card">
+        <text class="summary-card__label">累计词汇</text>
+        <view><text class="summary-card__number">{{learnedCount}}</text><text class="summary-card__unit">词</text></view>
+      </view>
+      <view class="summary-card">
+        <text class="summary-card__label">连续学习</text>
+        <view><text class="summary-card__number">{{streak}}</text><text class="summary-card__unit">天</text></view>
+      </view>
+    </view>
+
+    <view class="panel calendar-panel">
+      <view class="panel-head calendar-head">
+        <view class="calendar-head__copy">
+          <text class="panel-title">学习日历</text>
+        </view>
+        <view class="month-switcher">
+          <button class="month-button" bindtap="previousMonth" aria-label="上个月">‹</button>
+          <text class="month-title">{{monthTitle}}</text>
+          <button class="month-button {{!canNextMonth ? 'month-button--disabled' : ''}}" bindtap="nextMonth" disabled="{{!canNextMonth}}" aria-label="下个月">›</button>
+        </view>
+      </view>
+      <view class="weekday-row">
+        <text wx:for="{{['一','二','三','四','五','六','日']}}" wx:key="*this">{{item}}</text>
+      </view>
+      <view class="calendar-grid">
+        <view wx:for="{{calendarCells}}" wx:key="key" class="calendar-cell">
+          <view wx:if="{{!item.blank}}" class="calendar-day {{item.colorClass}} {{item.selected ? 'calendar-day--selected' : ''}}" data-date="{{item.date}}" bindtap="selectDate">
+            <text>{{item.day}}</text>
+          </view>
+        </view>
+      </view>
+      <view class="heat-legend">
+        <text>少</text><view class="legend-swatch calendar-day--level-0"></view><view class="legend-swatch calendar-day--level-1"></view><view class="legend-swatch calendar-day--level-2"></view><view class="legend-swatch calendar-day--level-3"></view><view class="legend-swatch calendar-day--level-4"></view><text>多</text>
+      </view>
+      <view class="day-detail">
+        <text class="day-detail__date">{{selectedDateText}}</text>
+        <view class="detail-grid">
+          <view><text>{{selectedStat.learnedWordIds.length}}</text><text>不同单词</text></view>
+          <view><text>{{selectedStat.newWordIds.length}}</text><text>新词</text></view>
+          <view><text>{{selectedStat.reviewedWordIds.length}}</text><text>复习词</text></view>
+          <view><text>{{selectedStat.totalMatches}}</text><text>配对次数</text></view>
+          <view><text>{{selectedAccuracy}}</text><text>首次正确率</text></view>
+          <view><text>{{selectedDuration}}</text><text>有效时长</text></view>
+        </view>
+      </view>
+    </view>
+
+    <view class="panel trend-panel">
+      <view class="panel-head">
+        <view><text class="panel-title">每日学习趋势</text></view>
+      </view>
+      <view class="segment-control">
+        <button wx:for="{{[7,30,90]}}" wx:key="*this" class="segment {{trendDays === item ? 'segment--active' : ''}}" data-days="{{item}}" bindtap="changeTrendDays">{{item}}天</button>
+      </view>
+      <view class="series-control">
+        <button class="series-chip {{trendSeries === 'total' ? 'series-chip--active' : ''}}" data-series="total" bindtap="changeTrendSeries">合计</button>
+        <button class="series-chip {{trendSeries === 'new' ? 'series-chip--active' : ''}}" data-series="new" bindtap="changeTrendSeries">新词</button>
+        <button class="series-chip {{trendSeries === 'review' ? 'series-chip--active' : ''}}" data-series="review" bindtap="changeTrendSeries">复习</button>
+      </view>
+      <view class="chart-readout"><text>{{selectedTrendDate}}</text><text>{{selectedTrendValue}} 词</text></view>
+      <view class="chart-area">
+        <view class="y-axis"><text>{{trendMax}}</text><text>0</text></view>
+        <view class="chart-plot">
+          <view class="grid-line grid-line--top"></view><view class="grid-line grid-line--bottom"></view>
+          <view class="bars">
+            <view wx:for="{{trendPoints}}" wx:key="date" class="bar-column" data-date="{{item.date}}" bindtap="selectTrendPoint">
+              <view class="bar-track"><view class="bar {{item.value === 0 ? 'bar--zero' : ''}} {{item.selected ? 'bar--selected' : ''}}" style="height: {{item.heightPercent}}%;"></view></view>
+              <text class="x-label">{{item.showLabel ? item.shortDate : ''}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="panel breakdown-panel">
+      <text class="panel-title">学习构成</text>
+      <text class="panel-subtitle">按当前 {{trendDays}} 天范围统计</text>
+      <view class="ratio-row">
+        <view class="ratio-copy"><text>新词 {{rangeNewCount}}</text><text>{{newRatio}}%</text></view>
+        <view class="ratio-copy ratio-copy--review"><text>复习 {{rangeReviewCount}}</text><text>{{reviewRatio}}%</text></view>
+      </view>
+      <view class="ratio-bar"><view class="ratio-bar__new" style="width: {{newRatio}}%;"></view><view class="ratio-bar__review" style="width: {{reviewRatio}}%;"></view></view>
+      <view class="mode-list">
+        <view wx:for="{{modeItems}}" wx:key="mode" class="mode-row">
+          <text>{{item.label}}</text><view class="mode-track"><view class="mode-fill mode-fill--{{item.mode}}" style="width: {{item.percent}}%;"></view></view><text>{{item.count}} 词</text>
+        </view>
+      </view>
+    </view>
+
+    <view wx:if="{{migrationNote}}" class="migration-note"><text>{{migrationNote}}</text></view>
+  </view>
+</view>
+<global-dictionary id="globalDictionary" />

@@ -1,0 +1,28 @@
+<view class="levels-page">
+  <view class="page-shell safe-bottom">
+    <view class="page-intro">
+      <text class="page-intro__kicker type-eyebrow">10 STAGES</text>
+      <text class="page-intro__title type-page-title">{{playType === 'quiz' ? '一关一关，把生词选准' : '一关一关，把生词碰熟'}}</text>
+      <text class="page-intro__desc type-body">当前词库：{{bookLabel}}。每关 20 个不同单词，首次答对率越高，星级越高。</text>
+    </view>
+    <view class="level-grid">
+      <button
+        wx:for="{{levels}}"
+        wx:key="level"
+        class="level-card {{item.unlocked ? '' : 'level-card--locked'}}"
+        data-level="{{item.level}}"
+        bindtap="selectLevel"
+      >
+        <view class="level-card__number type-stat">{{item.unlocked ? item.level : '·'}}</view>
+        <view class="level-card__label type-card-title">第 {{item.level}} 关</view>
+        <view wx:if="{{item.unlocked}}" class="level-card__stars">
+          <text class="{{item.stars >= 1 ? 'star--on' : ''}}">★</text>
+          <text class="{{item.stars >= 2 ? 'star--on' : ''}}">★</text>
+          <text class="{{item.stars >= 3 ? 'star--on' : ''}}">★</text>
+        </view>
+        <view wx:else class="level-card__locked-text type-assistive">未解锁</view>
+      </button>
+    </view>
+  </view>
+</view>
+<global-dictionary id="globalDictionary" />

@@ -1,0 +1,8 @@
+node_modules/
+.test-build/
+miniprogram_npm/
+project.private.config.json
+.workbuddy/
+source-assets/
+.cloudbase/
+reports/

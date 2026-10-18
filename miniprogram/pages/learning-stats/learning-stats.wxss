@@ -1,0 +1,93 @@
+.stats-page { width: 100%; min-height: calc(100vh + 240rpx); overflow-x: hidden; background: #f4faf7; }
+.stats-shell { width: 100%; max-width: 100vw; padding: 34rpx 24rpx 64rpx; overflow-x: hidden; }
+.page-head { padding: 8rpx 8rpx 26rpx; }
+.page-head text { display: block; }
+.page-head .type-eyebrow { color: #2c8772; }
+.page-head .type-page-title { margin-top: 12rpx; font-weight: 600; }
+.page-head .type-assistive { margin-top: 10rpx; }
+.summary-grid { display: flex; align-items: stretch; }
+.summary-card { flex: 1; min-width: 0; margin-right: 12rpx; padding: 22rpx 16rpx; border: 2rpx solid #e6efec; border-radius: 24rpx; background: #fff; box-shadow: 0 8rpx 24rpx rgba(31,91,76,.05); box-sizing: border-box; }
+.summary-card:last-child { margin-right: 0; }
+.summary-card--today { background: #dff3eb; border-color: #d1ebe1; }
+.summary-card__label { display: block; color: #58776f; font-size: 24rpx; font-weight: 600; white-space: nowrap; }
+.summary-card__number { color: #174f45; font-family: "Helvetica Neue", Arial, sans-serif; font-size: 44rpx; font-weight: 700; line-height: 1.35; }
+.summary-card__unit { margin-left: 5rpx; color: #58776f; font-size: 22rpx; }
+.panel { margin-top: 24rpx; padding: 26rpx 22rpx; border: 2rpx solid #e6efec; border-radius: 28rpx; background: #fff; box-shadow: 0 8rpx 28rpx rgba(31,91,76,.055); overflow: hidden; }
+.panel-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16rpx; }
+.panel-head > view:first-child { min-width: 0; }
+.panel-title { display: block; color: #193f36; font-size: 30rpx; font-weight: 600; }
+.panel-subtitle { display: block; margin-top: 6rpx; color: #718d85; font-size: 24rpx; }
+.calendar-head { display: block; width: 100%; }
+.calendar-head__copy { width: 100%; }
+.month-switcher { width: 100%; margin-top: 20rpx; display: flex; align-items: center; justify-content: space-between; border-radius: 18rpx; background: #f1f6f4; box-sizing: border-box; }
+.month-button { flex: 0 0 58rpx; width: 58rpx; height: 58rpx; margin: 0; padding: 0; display: flex; align-items: center; justify-content: center; background: transparent; color: #276d5e; font-size: 40rpx; line-height: 1; }
+.month-button--disabled { color: #b9cac5; }
+.month-title { display: block; flex: 0 0 240rpx; width: 240rpx; text-align: center; color: #284e45; font-size: 24rpx; font-weight: 600; white-space: nowrap; word-break: keep-all; }
+.weekday-row, .calendar-grid { display: flex; flex-wrap: wrap; width: 100%; }
+.weekday-row { margin-top: 26rpx; }
+.weekday-row text { width: 14.2857%; text-align: center; color: #839b95; font-size: 22rpx; box-sizing: border-box; }
+.calendar-grid { margin-top: 10rpx; }
+.calendar-cell { width: 14.2857%; height: 76rpx; padding: 4rpx; box-sizing: border-box; }
+.calendar-day { width: 100%; height: 100%; border-radius: 12rpx; display: flex; align-items: center; justify-content: center; color: #315c52; font-size: 24rpx; font-weight: 600; box-sizing: border-box; }
+.calendar-day--level-0 { background: #eef2f0; color: #789089; }
+.calendar-day--level-1 { background: #d8f0e5; }
+.calendar-day--level-2 { background: #a9d9c7; }
+.calendar-day--level-3 { background: #5eaf94; color: #fff; }
+.calendar-day--level-4 { background: #176b57; color: #fff; }
+.calendar-day--future { background: #f7f9f8; color: #c2ceca; }
+.calendar-day--selected { border: 4rpx solid #123f35; box-shadow: 0 0 0 3rpx #fff inset; }
+.heat-legend { margin-top: 16rpx; display: flex; align-items: center; justify-content: flex-end; gap: 7rpx; color: #718d85; font-size: 22rpx; }
+.legend-swatch { width: 22rpx; height: 22rpx; border-radius: 6rpx; }
+.day-detail { margin-top: 22rpx; padding: 22rpx; border-radius: 22rpx; background: #f2f8f5; }
+.day-detail__date { display: block; color: #1f5f50; font-size: 26rpx; font-weight: 600; }
+.detail-grid { margin-top: 8rpx; display: flex; flex-wrap: wrap; }
+.detail-grid view { width: 33.3333%; min-width: 0; margin-top: 16rpx; box-sizing: border-box; }
+.detail-grid text { display: block; text-align: center; }
+.detail-grid text:first-child { color: #174f45; font-size: 30rpx; font-weight: 700; white-space: nowrap; }
+.detail-grid text:last-child { margin-top: 3rpx; color: #718d85; font-size: 22rpx; white-space: nowrap; }
+.segment-control { width: 100%; margin-top: 22rpx; padding: 4rpx; display: flex; border-radius: 16rpx; background: #eef4f1; box-sizing: border-box; }
+.segment { flex: 1; min-width: 0; height: 54rpx; margin: 0 6rpx 0 0; padding: 0; border-radius: 13rpx; display: flex; align-items: center; justify-content: center; box-sizing: border-box; background: transparent; color: #6a847d; font-size: 22rpx; line-height: 1; }
+.segment:last-child { margin-right: 0; }
+.segment--active { background: #fff; color: #185b4b; font-weight: 600; box-shadow: 0 3rpx 10rpx rgba(31,91,76,.09); }
+.series-control { width: 100%; margin-top: 16rpx; display: flex; }
+.series-chip { flex: 1; min-width: 0; height: 54rpx; margin: 0 12rpx 0 0; padding: 0; border: 2rpx solid #dfeae6; border-radius: 999rpx; display: flex; align-items: center; justify-content: center; box-sizing: border-box; background: #fff; color: #658078; font-size: 22rpx; line-height: 1; }
+.series-chip:last-child { margin-right: 0; }
+.series-chip--active { border-color: #2c8772; background: #e2f2ec; color: #176b57; font-weight: 600; }
+.chart-readout { margin-top: 20rpx; display: flex; justify-content: space-between; color: #4b7066; font-size: 24rpx; }
+.chart-readout text:last-child { color: #174f45; font-weight: 700; }
+.chart-area { height: 286rpx; margin-top: 12rpx; display: flex; }
+.y-axis { width: 42rpx; padding: 0 4rpx 38rpx 0; display: flex; flex-direction: column; justify-content: space-between; box-sizing: border-box; color: #8aa099; font-size: 20rpx; text-align: right; }
+.chart-plot { position: relative; flex: 1; min-width: 0; }
+.grid-line { position: absolute; left: 0; right: 0; height: 2rpx; background: #edf2f0; }
+.grid-line--top { top: 0; }
+.grid-line--bottom { bottom: 38rpx; }
+.bars { position: relative; z-index: 1; height: 100%; display: flex; align-items: stretch; }
+.bar-column { flex: 1; min-width: 0; height: 100%; display: flex; flex-direction: column; align-items: center; }
+.bar-track { width: 66%; min-width: 2rpx; flex: 1; display: flex; align-items: flex-end; justify-content: center; }
+.bar { width: 100%; min-height: 4rpx; border-radius: 7rpx 7rpx 2rpx 2rpx; background: #71b9a1; transition: opacity 120ms ease; }
+.bar--zero { height: 4rpx !important; background: #dce7e3; }
+.bar--selected { background: #176b57; box-shadow: 0 0 0 3rpx rgba(23,107,87,.12); }
+.x-label { width: 180%; height: 38rpx; padding-top: 8rpx; color: #839b95; font-size: 18rpx; text-align: center; white-space: nowrap; box-sizing: border-box; }
+.breakdown-panel > .panel-subtitle { margin-bottom: 22rpx; }
+.ratio-row { display: flex; justify-content: space-between; gap: 20rpx; }
+.ratio-copy { flex: 1; display: flex; justify-content: space-between; color: #297962; font-size: 24rpx; font-weight: 600; }
+.ratio-copy--review { color: #4f7892; }
+.ratio-bar { height: 18rpx; margin-top: 12rpx; border-radius: 999rpx; display: flex; overflow: hidden; background: #edf2f0; }
+.ratio-bar__new { background: #5eaf94; }
+.ratio-bar__review { background: #85aec2; }
+.mode-list { margin-top: 26rpx; display: flex; flex-direction: column; gap: 18rpx; }
+.mode-row { display: flex; align-items: center; color: #4b7066; font-size: 24rpx; }
+.mode-row > text:first-child { width: 116rpx; flex-shrink: 0; }
+.mode-row > text:last-child { width: 74rpx; flex-shrink: 0; margin-left: 12rpx; text-align: right; color: #284e45; }
+.mode-track { flex: 1; min-width: 0; height: 14rpx; margin-left: 12rpx; border-radius: 999rpx; overflow: hidden; background: #edf2f0; }
+.mode-fill { height: 100%; min-width: 0; border-radius: inherit; background: #6bb49b; }
+.mode-fill--level { background: #7ba8bf; }
+.mode-fill--custom { background: #d2aa69; }
+.migration-note { margin: 22rpx 8rpx 0; padding: 20rpx; border-radius: 18rpx; background: #edf4f1; color: #69827b; font-size: 22rpx; line-height: 1.6; }
+@media (max-width: 340px) {
+  .stats-shell { padding-left: 18rpx; padding-right: 18rpx; }
+  .summary-card { margin-right: 8rpx; }
+  .summary-card { padding-left: 10rpx; padding-right: 10rpx; }
+  .summary-card__number { font-size: 44rpx; }
+  .panel { padding-left: 16rpx; padding-right: 16rpx; }
+}

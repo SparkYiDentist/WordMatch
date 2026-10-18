@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "存储空间管理",
+  "usingComponents": {
+    "global-dictionary": "/components/global-dictionary/global-dictionary"
+  },
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "dark"
+}

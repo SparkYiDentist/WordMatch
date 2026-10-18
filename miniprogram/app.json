@@ -1,0 +1,27 @@
+{
+  "pages": [
+    "pages/splash/splash",
+    "pages/index/index",
+    "pages/learning-stats/learning-stats",
+    "pages/game/game",
+    "pages/word-quiz/word-quiz",
+    "pages/levels/levels",
+    "pages/custom/custom",
+    "pages/personal-packs/personal-packs",
+    "pages/personal-pack-detail/personal-pack-detail",
+    "pages/personal-pack-edit/personal-pack-edit",
+    "pages/result/result",
+    "pages/vocabulary/vocabulary",
+    "pages/settings/settings",
+    "pages/storage-manager/storage-manager"
+  ],
+  "window": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "WordMatch",
+    "navigationBarBackgroundColor": "#f4faf7",
+    "backgroundColor": "#f4faf7"
+  },
+  "style": "v2",
+  "componentFramework": "glass-easel",
+  "lazyCodeLoading": "requiredComponents"
+}

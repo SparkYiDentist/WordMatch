@@ -1,0 +1,95 @@
+<view class="custom-page">
+  <view class="page-shell custom-shell safe-bottom">
+    <view class="custom-head">
+      <text class="custom-head__kicker type-eyebrow">BUILD YOUR SESSION</text>
+      <text class="custom-head__title type-page-title">今天想练哪一组？</text>
+      <text class="custom-head__mode">{{playType === 'quiz' ? '单词四选一 · WORD QUIZ' : '配对消除 · MATCHING'}}</text>
+      <text class="custom-head__badge type-meta">本地正式词库</text>
+    </view>
+
+    <view class="settings-stack">
+      <view class="personal-entry" hover-class="personal-entry--pressed" bindtap="openPersonalPacks">
+        <view class="personal-entry__mark">W</view>
+        <view class="personal-entry__copy">
+          <text class="personal-entry__title">我的词包</text>
+          <text class="personal-entry__desc">粘贴、导入或手动添加自己的单词</text>
+        </view>
+        <text class="personal-entry__arrow">›</text>
+      </view>
+
+      <view class="wrong-pack">
+        <view class="wrong-pack__head" hover-class="wrong-pack__head--pressed" bindtap="toggleWrongPack">
+          <view class="wrong-pack__mark">!</view>
+          <view class="wrong-pack__copy">
+            <text class="wrong-pack__title">错题包</text>
+            <text class="wrong-pack__desc">所有训练中的错题，按日期自动归档</text>
+          </view>
+          <text class="wrong-pack__count">{{wrongPacks.length}}</text>
+          <text class="wrong-pack__chevron {{wrongPackExpanded ? 'wrong-pack__chevron--open' : ''}}">⌄</text>
+        </view>
+        <view wx:if="{{wrongPackExpanded}}" class="wrong-pack__body">
+          <view wx:if="{{!wrongPacks.length}}" class="wrong-pack__empty">完成任意训练后，当日错题会收进这里。</view>
+          <view wx:for="{{wrongPacks}}" wx:key="date" class="date-pack">
+            <view class="date-pack__head" data-date="{{item.date}}" bindtap="toggleWrongDate">
+              <view><text class="date-pack__date">{{item.dateLabel}}</text><text class="date-pack__year">{{item.date}}</text></view>
+              <view class="date-pack__meta"><text>{{item.count}} 词</text><button class="date-pack__practice" data-date="{{item.date}}" catchtap="practiceWrongPack">练习</button><text class="date-pack__arrow {{item.expanded ? 'date-pack__arrow--open' : ''}}">›</text></view>
+            </view>
+            <view wx:if="{{item.expanded}}" class="date-pack__content">
+              <scroll-view class="wrong-entry-scroll" style="height: {{item.listHeight}}rpx" scroll-y enhanced show-scrollbar>
+                <view wx:for="{{item.words}}" wx:for-item="word" wx:key="id" class="wrong-entry">
+                  <view class="wrong-entry__copy"><text class="wrong-entry__english">{{word.english}}</text><text class="wrong-entry__chinese">{{word.chinese}}</text></view>
+                  <button class="wrong-entry__delete" data-word-id="{{word.id}}" catchtap="deleteWrongEntry">删除</button>
+                </view>
+              </scroll-view>
+            </view>
+          </view>
+        </view>
+      </view>
+      <view class="setting-block">
+        <view class="setting-block__head">
+          <view class="setting-block__step">01</view>
+          <view class="setting-block__title type-section-title">选择词库</view>
+        </view>
+        <view class="option-grid">
+          <view class="option option--book {{bookId === 'high_school' ? 'option--active' : ''}}" hover-class="option--pressed" data-value="high_school" bindtap="selectBook"><text class="option__label">高中英语</text><text class="option__meta">正式词库</text></view>
+          <view class="option option--book {{bookId === 'cet4' ? 'option--active' : ''}}" hover-class="option--pressed" data-value="cet4" bindtap="selectBook"><text class="option__label">大学四级</text><text class="option__meta">正式词库</text></view>
+          <view class="option option--book {{bookId === 'cet6' ? 'option--active' : ''}}" hover-class="option--pressed" data-value="cet6" bindtap="selectBook"><text class="option__label">大学六级</text><text class="option__meta">正式词库</text></view>
+        </view>
+      </view>
+
+      <view class="setting-block">
+        <view class="setting-block__head">
+          <view class="setting-block__step">02</view>
+          <view class="setting-block__title type-section-title">学习范围</view>
+        </view>
+        <view class="option-grid">
+          <view class="option {{scope === 'all' ? 'option--active' : ''}}" hover-class="option--pressed" data-value="all" bindtap="selectScope">全部单词</view>
+          <view class="option {{scope === 'unlearned' ? 'option--active' : ''}}" hover-class="option--pressed" data-value="unlearned" bindtap="selectScope">未学习</view>
+          <view class="option {{scope === 'wrong' ? 'option--active' : ''}}" hover-class="option--pressed" data-value="wrong" bindtap="selectScope">历史错词</view>
+        </view>
+      </view>
+
+      <view class="setting-block">
+        <view class="setting-block__head">
+          <view class="setting-block__step">03</view>
+          <view class="setting-block__title type-section-title">训练数量</view>
+        </view>
+        <view class="count-row">
+          <view class="count-option {{count === 10 ? 'count-option--active' : ''}}" hover-class="count-option--pressed" data-value="10" bindtap="selectCount">10</view>
+          <view class="count-option {{count === 20 ? 'count-option--active' : ''}}" hover-class="count-option--pressed" data-value="20" bindtap="selectCount">20</view>
+          <view class="count-option {{count === 50 ? 'count-option--active' : ''}}" hover-class="count-option--pressed" data-value="50" bindtap="selectCount">50</view>
+          <view class="count-option {{useAll ? 'count-option--active' : ''}}" hover-class="count-option--pressed" data-value="all" bindtap="selectCount">全部</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="action-area">
+      <view class="availability {{canStart ? '' : 'availability--empty'}}">
+        <text class="availability__label">{{canStart ? '当前可用' : '当前范围暂无单词'}}</text>
+        <text wx:if="{{canStart}}" class="availability__count">{{availableCount}} 词</text>
+      </view>
+      <button class="start-button button-base button-primary" disabled="{{!canStart}}" bindtap="startLearning">开始学习</button>
+    </view>
+  </view>
+</view>
+<global-dictionary id="globalDictionary" />

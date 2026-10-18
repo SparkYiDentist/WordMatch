@@ -1,0 +1,8 @@
+{
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "global-dictionary": "/components/global-dictionary/global-dictionary"
+  },
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "dark"
+}

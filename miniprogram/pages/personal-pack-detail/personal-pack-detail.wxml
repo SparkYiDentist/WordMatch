@@ -1,0 +1,43 @@
+<view wx:if="{{pack}}" class="detail-page">
+  <view class="page-shell safe-bottom">
+    <view class="detail-hero">
+      <text class="detail-hero__kicker type-eyebrow">PERSONAL WORD PACK</text>
+      <text class="detail-hero__title">{{pack.name}}</text>
+      <view class="detail-hero__meta"><text>{{pack.wordCount}} 个单词</text><text>最近练习 {{lastPracticeText}}</text></view>
+      <view class="hero-progress"><view class="hero-progress__copy"><text>已练习 {{pack.practicedWordCount}} 词</text><text>{{progressPercent}}%</text></view><view class="hero-progress__track"><view class="hero-progress__bar" style="width: {{progressPercent}}%;"></view></view></view>
+    </view>
+
+    <view class="stats-grid">
+      <view class="stat"><text class="stat__value">{{pack.pairAttempts}}</text><text class="stat__label">累计配对</text></view>
+      <view class="stat"><text class="stat__value">{{pack.firstTryAccuracy}}%</text><text class="stat__label">首次正确率</text></view>
+      <view class="stat"><text class="stat__value">{{pack.errorCount}}</text><text class="stat__label">错误次数</text></view>
+    </view>
+
+    <view class="test-panel">
+      <text class="panel-title">开始一次{{playType === 'quiz' ? '四选一' : '配对'}}测试</text>
+      <text class="panel-label">学习范围</text>
+      <view class="segmented">
+        <view class="segment {{scope === 'all' ? 'segment--active' : ''}}" data-value="all" bindtap="selectScope">全部单词</view>
+        <view class="segment {{scope === 'unlearned' ? 'segment--active' : ''}}" data-value="unlearned" bindtap="selectScope">未学习</view>
+        <view class="segment {{scope === 'wrong' ? 'segment--active' : ''}}" data-value="wrong" bindtap="selectScope">历史错词</view>
+      </view>
+      <text class="panel-label panel-label--spaced">训练数量</text>
+      <view class="count-grid">
+        <view class="count {{!useAll && count === 10 ? 'count--active' : ''}}" data-value="10" bindtap="selectCount">10</view>
+        <view class="count {{!useAll && count === 20 ? 'count--active' : ''}}" data-value="20" bindtap="selectCount">20</view>
+        <view class="count {{!useAll && count === 50 ? 'count--active' : ''}}" data-value="50" bindtap="selectCount">50</view>
+        <view class="count {{useAll ? 'count--active' : ''}}" data-value="all" bindtap="selectCount">全部</view>
+      </view>
+      <view class="availability {{canStart ? '' : 'availability--warn'}}">当前范围可用 {{availableCount}} 词</view>
+      <button class="button-base button-primary" disabled="{{!canStart}}" bindtap="startTest">开始测试</button>
+    </view>
+
+    <view class="manage-panel">
+      <button bindtap="editPack">编辑 / 添加单词</button>
+      <button bindtap="renamePack">重命名</button>
+      <button bindtap="copyPack">复制词包</button>
+      <button class="danger" bindtap="deletePack">删除词包</button>
+    </view>
+  </view>
+</view>
+<global-dictionary id="globalDictionary" />

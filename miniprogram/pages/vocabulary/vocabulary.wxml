@@ -1,0 +1,51 @@
+<view class="vocabulary-page">
+  <view class="page-shell safe-bottom">
+    <view class="vocab-head">
+      <view class="vocab-head__copy">
+        <text class="vocab-head__kicker type-eyebrow">{{kicker}}</text>
+        <text class="vocab-head__title type-page-title">{{title}}</text>
+        <text class="vocab-head__summary type-assistive">{{summary}}</text>
+      </view>
+      <view class="vocab-head__count {{accentClass}}">{{words.length}}</view>
+    </view>
+
+    <block wx:if="{{words.length}}">
+      <view wx:if="{{manageMode}}" class="manage-date-list">
+        <view wx:for="{{wrongDateGroups}}" wx:key="date" class="manage-date">
+          <view class="manage-date__head" hover-class="manage-date__head--pressed" data-date="{{item.date}}" bindtap="toggleWrongDate">
+            <view class="manage-date__calendar"><text class="manage-date__day">{{item.dateLabel}}</text><text class="manage-date__full">{{item.date}}</text></view>
+            <view class="manage-date__meta"><text>{{item.count}} 条</text><button class="manage-date__delete" data-date="{{item.date}}" catchtap="deleteWrongDate">删除当天</button><text class="manage-date__arrow {{item.expanded ? 'manage-date__arrow--open' : ''}}">›</text></view>
+          </view>
+          <view wx:if="{{item.expanded}}" class="manage-date__body">
+            <scroll-view class="manage-date__scroll" style="height: {{item.listHeight}}rpx" scroll-y enhanced show-scrollbar>
+              <view wx:for="{{item.words}}" wx:for-item="word" wx:key="id" class="word-row word-row--nested">
+                <view class="word-row__main">
+                  <view class="word-row__heading"><text class="word-row__english">{{word.english}}</text><text class="word-row__pos">{{word.partOfSpeech}}</text></view>
+                  <text class="word-row__chinese">{{word.chinese}}</text>
+                </view>
+                <view class="word-row__meta"><text class="word-row__tag">{{word.tag}}</text></view>
+              </view>
+            </scroll-view>
+          </view>
+        </view>
+      </view>
+      <view wx:else class="word-list">
+        <view wx:for="{{words}}" wx:key="id" class="word-row">
+          <view class="word-row__main">
+            <view class="word-row__heading"><text class="word-row__english">{{item.english}}</text><text class="word-row__pos">{{item.partOfSpeech}}</text></view>
+            <text class="word-row__chinese">{{item.chinese}}</text>
+          </view>
+          <view class="word-row__meta"><text class="word-row__tag">{{item.tag}}</text><text class="word-row__date">{{item.date}}</text></view>
+        </view>
+      </view>
+      <button wx:if="{{showReview}}" class="review-button button-base button-primary" bindtap="startReview">复习错词</button>
+    </block>
+    <view wx:else class="empty-state">
+      <view class="empty-state__mark">✓</view>
+      <view class="empty-state__title type-dialog-title">{{emptyTitle}}</view>
+      <view class="empty-state__desc type-body">{{emptyDesc}}</view>
+      <button class="button-base button-primary" bindtap="goCustom">开始一轮练习</button>
+    </view>
+  </view>
+</view>
+<global-dictionary id="globalDictionary" />

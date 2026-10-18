@@ -1,0 +1,25 @@
+<view class="result-page page-shell safe-bottom">
+  <view wx:if="{{result}}" class="result-card">
+    <view class="result-card__ring">
+      <text class="result-card__score type-stat">{{result.firstTryAccuracy}}%</text>
+      <text class="result-card__unit type-meta">首次正确率</text>
+    </view>
+    <view class="result-card__eyebrow type-eyebrow">SESSION COMPLETE</view>
+    <view class="result-card__title type-page-title">{{result.completedWords > 0 ? '这一轮，记住了。' : '学习记录已保存'}}</view>
+    <view wx:if="{{result.mode === 'level'}}" class="result-stars">
+      <text class="{{result.stars >= 1 ? 'result-star--on' : ''}}">★</text>
+      <text class="{{result.stars >= 2 ? 'result-star--on' : ''}}">★</text>
+      <text class="{{result.stars >= 3 ? 'result-star--on' : ''}}">★</text>
+    </view>
+    <view class="result-grid">
+      <view class="result-stat"><text class="result-stat__value type-stat">{{result.completedWords}}</text><text class="result-stat__label">完成单词</text></view>
+      <view class="result-stat"><text class="result-stat__value type-stat">{{result.accuracy}}%</text><text class="result-stat__label">判定正确率</text></view>
+      <view class="result-stat"><text class="result-stat__value type-stat">{{result.bestStreak}}</text><text class="result-stat__label">最高连击</text></view>
+      <view class="result-stat"><text class="result-stat__value type-stat">{{durationText}}</text><text class="result-stat__label">学习时长</text></view>
+    </view>
+  </view>
+  <view wx:else class="empty-result type-body">暂无可显示的学习结果</view>
+  <button wx:if="{{result}}" class="primary-button button-base button-primary" bindtap="replay">再学一次</button>
+  <button class="secondary-button button-base button-secondary" bindtap="goHome">返回首页</button>
+</view>
+<global-dictionary id="globalDictionary" />

@@ -1,0 +1,8 @@
+{
+  "navigationStyle": "custom",
+  "disableScroll": true,
+  "usingComponents": {
+    "word-card": "/components/word-card/word-card",
+    "global-dictionary": "/components/global-dictionary/global-dictionary"
+  }
+}

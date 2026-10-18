@@ -1,0 +1,135 @@
+<page-container
+  show="{{visible}}"
+  position="right"
+  overlay="{{false}}"
+  close-on-slide-down="{{false}}"
+  z-index="999"
+  custom-style="width: 100vw; height: 100vh; background: #f4faf7;"
+  bind:leave="onContainerLeave"
+>
+<view class="dictionary-overlay">
+  <view class="dictionary-shell">
+    <view class="dictionary-top" style="padding-top: {{topInset}}px;">
+      <text class="dictionary-title">查单词</text>
+    </view>
+
+    <view class="dictionary-searchbar">
+      <button class="header-back" bindtap="goBack" aria-label="返回上一步">
+        <text class="header-back__arrow">‹</text>
+      </button>
+      <view class="search-box">
+        <text class="search-box__icon">⌕</text>
+        <input
+          class="search-box__input"
+          value="{{query}}"
+          focus="{{focusInput}}"
+          confirm-type="search"
+          placeholder="搜索英文、短语或中文释义"
+          bindinput="handleInput"
+          bindconfirm="submitSearch"
+          bindblur="onInputBlur"
+        />
+        <button wx:if="{{query}}" class="search-box__clear" bindtap="clearQuery" aria-label="清除输入">×</button>
+      </view>
+    </view>
+
+    <scroll-view wx:if="{{!selectedEntry}}" class="dictionary-content" scroll-y enhanced show-scrollbar="{{false}}">
+      <view wx:if="{{!query}}" class="search-welcome">
+        <view wx:if="{{history.length}}" class="history-section">
+          <view class="section-heading"><text class="section-heading__title">最近搜索</text><button class="section-heading__action" bindtap="clearHistory">清空</button></view>
+          <view class="history-list">
+            <view wx:for="{{history}}" wx:key="*this" class="history-chip" data-query="{{item}}" bindtap="useHistory">
+              <text class="history-chip__clock">↺</text>
+              <text class="history-chip__text">{{item}}</text>
+              <button class="history-chip__remove" data-query="{{item}}" catchtap="removeHistory">×</button>
+            </view>
+          </view>
+        </view>
+
+        <view wx:else class="search-welcome__empty">
+          <view class="welcome-mark"><text>W</text><view class="welcome-mark__accent"></view></view>
+          <text class="welcome-title">随时捡起一个词</text>
+          <text class="welcome-desc">支持英文精确与前缀查询、中文释义、词形和拼写建议</text>
+        </view>
+      </view>
+
+      <view wx:elif="{{searching}}" class="loading-state"><view class="loading-state__ring"></view><text class="loading-state__text">正在本地词库中检索…</text></view>
+
+      <view wx:elif="{{results.length}}" class="results-section">
+        <view class="result-summary">找到 {{results.length}} 个候选</view>
+        <view
+          wx:for="{{results}}"
+          wx:key="id"
+          class="result-row"
+          data-id="{{item.id}}"
+          bindtap="selectResult"
+          hover-class="result-row--pressed"
+        >
+          <view class="result-row__main">
+            <view class="result-row__head">
+              <text class="result-row__word">{{item.headword}}</text>
+              <text class="result-row__pos">{{item.partOfSpeech}}</text>
+            </view>
+            <text class="result-row__meaning">{{item.matchMeaning}}</text>
+            <view class="result-row__tags">
+              <text class="match-tag">{{item.matchLabel}}</text>
+              <text wx:for="{{item.bookIds}}" wx:for-item="book" wx:key="*this" class="book-dot">{{book === 'high_school' ? '高中' : book === 'cet4' ? 'CET-4' : 'CET-6'}}</text>
+            </view>
+          </view>
+          <text class="result-row__arrow">›</text>
+        </view>
+        <view class="content-safe-bottom"></view>
+      </view>
+
+      <view wx:else class="empty-state">
+        <view class="empty-state__mark">?</view>
+        <text class="empty-state__title">没有找到“{{query}}”</text>
+        <text class="empty-state__desc">离线词库范围为高中、CET-4 和 CET-6。可检查拼写，或换用更短的关键词。</text>
+      </view>
+    </scroll-view>
+
+    <scroll-view wx:else class="dictionary-content detail-scroll" scroll-y enhanced show-scrollbar="{{false}}">
+      <view class="detail-hero">
+        <button class="detail-back" bindtap="goBack">‹ 返回结果</button>
+        <text class="detail-word">{{selectedEntry.headword}}</text>
+        <view wx:if="{{selectedEntry.phonetic}}" class="phonetic-row"><text>/ {{selectedEntry.phonetic}} /</text></view>
+      </view>
+
+      <view wx:if="{{selectedEntry.senses.length}}" class="detail-card">
+        <text class="detail-card__eyebrow">词性与义项</text>
+        <view wx:for="{{selectedEntry.senses}}" wx:key="index" class="sense-row {{index === 0 ? 'sense-row--first' : ''}}">
+          <text wx:if="{{item.partOfSpeech}}" class="sense-row__pos">{{item.partOfSpeech}}</text>
+          <view class="sense-row__copy"><text class="sense-row__short">{{item.matchMeaning}}</text><text wx:if="{{item.fullMeaning && item.fullMeaning !== item.matchMeaning}}" class="sense-row__full">{{item.fullMeaning}}</text></view>
+        </view>
+      </view>
+
+      <view wx:if="{{selectedEntry.englishDefinition}}" class="detail-card"><text class="detail-card__eyebrow">英文释义</text><text class="english-definition">{{selectedEntry.englishDefinition}}</text></view>
+      <view wx:if="{{selectedEntry.examples && selectedEntry.examples.length}}" class="detail-card"><text class="detail-card__eyebrow">双语例句</text></view>
+      <view wx:if="{{selectedEntry.collocations && selectedEntry.collocations.length}}" class="detail-card"><text class="detail-card__eyebrow">常见搭配</text></view>
+      <view wx:if="{{selectedEntry.synonyms && selectedEntry.synonyms.length}}" class="detail-card"><text class="detail-card__eyebrow">近义词</text></view>
+      <view wx:if="{{selectedEntry.antonyms && selectedEntry.antonyms.length}}" class="detail-card"><text class="detail-card__eyebrow">反义词</text></view>
+      <view wx:if="{{selectedEntry.wordForms}}" class="detail-card"><text class="detail-card__eyebrow">词形变化</text></view>
+      <view wx:if="{{selectedEntry.morphology || selectedEntry.etymology}}" class="detail-card"><text class="detail-card__eyebrow">词根词缀与词源</text></view>
+
+      <view class="source-note"><text>数据来源</text><text>{{selectedEntry.source}}</text></view>
+      <button class="add-pack-button" bindtap="showPackSheet">＋ 加入词包</button>
+      <view class="content-safe-bottom content-safe-bottom--detail"></view>
+    </scroll-view>
+  </view>
+
+  <view wx:if="{{packSheetVisible}}" class="pack-backdrop" bindtap="hidePackSheet">
+    <view class="pack-sheet" catchtap="stopEvent">
+      <view class="pack-sheet__handle"></view>
+      <view class="pack-sheet__heading"><view class="pack-sheet__heading-copy"><text class="pack-sheet__title">加入个人词包</text><text class="pack-sheet__desc">已添加的单词不会重复保存</text></view><button class="pack-sheet__close" bindtap="hidePackSheet">×</button></view>
+      <scroll-view class="pack-list" scroll-y>
+        <view wx:for="{{packs}}" wx:key="id" class="pack-option" data-id="{{item.id}}" bindtap="addToPack"><view class="pack-option__copy"><text class="pack-option__name">{{item.name}}</text><text class="pack-option__meta">{{item.wordCount}} 个单词</text></view><text class="pack-option__add">＋</text></view>
+      </scroll-view>
+      <button class="create-pack-button" bindtap="createPack">新建词包并加入</button>
+    </view>
+  </view>
+</view>
+</page-container>
+
+<view wx:if="{{showEntry && !visible}}" class="dictionary-entry" hover-class="dictionary-entry--pressed" bindtap="openFromEntry" aria-label="搜索单词">
+  <text class="dictionary-entry__icon">⌕</text>
+</view>

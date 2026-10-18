@@ -1,0 +1,14 @@
+<view
+  class="card {{!empty ? 'card--filled' : 'card--empty'}} {{state !== 'idle' ? 'card--' + state : ''}}"
+  bindtap="handleTap"
+  hover-class="{{!empty && !disabled && state !== 'waiting' ? 'card--pressed' : 'none'}}"
+  aria-role="button"
+  aria-label="{{accessibilityLabel}}"
+>
+  <block wx:if="{{!empty}}">
+    <text wx:if="{{side === 'english'}}" class="{{englishClass}}">{{word.english}}</text>
+    <text wx:else class="{{chineseClass}}">{{displayText}}</text>
+    <text wx:if="{{side === 'english' && word.partOfSpeech}}" class="card__meta">{{word.partOfSpeech}}</text>
+  </block>
+  <view wx:else class="card__placeholder"></view>
+</view>

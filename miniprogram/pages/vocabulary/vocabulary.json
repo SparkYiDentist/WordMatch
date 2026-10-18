@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "错词本",
+  "usingComponents": {
+    "global-dictionary": "/components/global-dictionary/global-dictionary"
+  },
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "dark"
+}

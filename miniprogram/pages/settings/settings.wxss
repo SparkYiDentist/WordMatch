@@ -1,0 +1,17 @@
+.settings-page { min-height: calc(100vh + 240rpx); background: #f4faf7; }
+.settings-shell { padding-top: 56rpx; }
+.settings-head { padding: 18rpx 8rpx 34rpx; }
+.settings-head text { display: block; }
+.settings-head__eyebrow { color: #2c8772; }
+.settings-head__title { margin-top: 12rpx; }
+.settings-head__desc { margin-top: 10rpx; }
+.settings-group { margin-bottom: 28rpx; }
+.settings-group__label { display: block; margin: 0 8rpx 12rpx; color: #718d85; }
+.settings-item { min-height: 126rpx; padding: 22rpx 24rpx; border: 2rpx solid #e5efeb; border-radius: 26rpx; background: #fff; box-shadow: 0 8rpx 28rpx rgba(31,91,76,.06); display: flex; align-items: center; transition: transform 120ms ease, opacity 120ms ease; }
+.settings-item--pressed { opacity: .82; transform: scale(.985); }
+.settings-item__icon { width: 72rpx; height: 72rpx; flex-shrink: 0; border-radius: 22rpx 10rpx 22rpx 10rpx; background: #dff3eb; color: #21725e; display: flex; align-items: center; justify-content: center; font-size: 42rpx; font-weight: 700; }
+.settings-item__icon--wrong { background: #ffe8e3; color: #bd594f; font-family: Georgia, serif; }
+.settings-item__copy { flex: 1; min-width: 0; margin-left: 22rpx; }
+.settings-item__copy text { display: block; }
+.settings-item__copy .type-assistive { margin-top: 6rpx; }
+.settings-item__arrow { color: #91aaa3; font-size: 40rpx; font-weight: 300; }

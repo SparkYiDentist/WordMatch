@@ -1,0 +1,151 @@
+<view class="game-page {{focusEnabled ? 'game-page--focus' : ''}}" style="padding-top: {{topInset}}px;" bindtouchstart="handleDictionaryTouchStart" bindtouchmove="handleDictionaryTouchMove" bindtouchend="handleDictionaryTouchEnd" bindtouchcancel="handleDictionaryTouchEnd">
+  <view class="game-top">
+    <view class="game-top__side">
+      <button class="back-button" bindtap="goBack" aria-label="返回">‹</button>
+    </view>
+    <view class="game-top__center">
+      <text class="game-top__mode type-nav-title">{{modeTitle}}</text>
+      <text class="game-top__timer type-meta">{{durationText}}</text>
+    </view>
+    <view class="game-top__side game-top__side--end">
+      <button wx:if="{{isEndless}}" class="focus-button {{ambientPlaying ? 'focus-button--playing' : ''}}" bindtap="openFocusPanel" aria-label="沉浸学习">
+        <view class="focus-button__icon"></view>
+      </button>
+      <button class="pause-button" bindtap="openPause">暂停</button>
+    </view>
+  </view>
+
+  <view class="metrics {{focusEnabled ? 'metrics--focus' : ''}}">
+    <view class="metric"><text class="metric__value type-stat">{{completedWords}}</text><text>已完成</text></view>
+    <view wx:if="{{!focusEnabled}}" class="metric"><text class="metric__value type-stat">{{currentStreak}}</text><text>连续正确</text></view>
+    <view wx:if="{{!focusEnabled}}" class="metric"><text class="metric__value type-stat">{{accuracy}}%</text><text>当前正确率</text></view>
+  </view>
+
+  <view wx:if="{{!focusEnabled}}" class="feedback-line">
+    <view class="feedback-line__dot"></view>
+    <text class="feedback-line__text">{{feedback}}</text>
+  </view>
+
+  <view class="board">
+    <view class="board__head"><text class="board__head-en">ENGLISH</text><text class="board__head-zh">中文释义</text></view>
+    <view class="board__columns">
+      <view class="card-column">
+        <word-card
+          wx:for="{{leftCards}}"
+          wx:key="slotId"
+          word="{{item.word}}"
+          empty="{{!item.word}}"
+          side="english"
+          state="{{item.state}}"
+          index="{{index}}"
+          disabled="{{interactionLocked}}"
+          bind:cardtap="handleCardTap"
+        />
+      </view>
+      <view class="board__rail"><view wx:for="{{[1,2,3,4,5]}}" wx:key="*this" class="board__rail-dot"></view></view>
+      <view class="card-column">
+        <word-card
+          wx:for="{{rightCards}}"
+          wx:key="slotId"
+          word="{{item.word}}"
+          empty="{{!item.word}}"
+          side="chinese"
+          state="{{item.state}}"
+          index="{{index}}"
+          disabled="{{interactionLocked}}"
+          bind:cardtap="handleCardTap"
+        />
+      </view>
+    </view>
+  </view>
+
+  <view wx:if="{{!focusEnabled}}" class="progress-panel">
+    <view class="progress-panel__copy"><text>学习进度</text><text class="progress-panel__value">{{progressText}}</text></view>
+    <view class="progress-track"><view class="progress-value" style="width: {{progressPercent}}%;"></view></view>
+  </view>
+
+  <view wx:if="{{focusPanelVisible}}" class="focus-overlay" catchtap="closeFocusPanel" catchtouchmove="stopOverlayTap">
+    <view
+      class="focus-sheet {{focusSheetGesture ? 'focus-sheet--gesture' : ''}} {{focusSheetDragging ? 'focus-sheet--dragging' : ''}} {{focusSheetSettling ? 'focus-sheet--settling' : ''}}"
+      style="transform: translate3d(0, {{focusSheetOffset}}px, 0);"
+      catchtap="stopOverlayTap"
+    >
+      <view
+        class="focus-sheet__drag-zone"
+        aria-label="下拉关闭沉浸学习面板"
+        catchtouchstart="handleSheetTouchStart"
+        catchtouchmove="handleSheetTouchMove"
+        catchtouchend="handleSheetTouchEnd"
+        catchtouchcancel="handleSheetTouchEnd"
+      ><view class="focus-sheet__handle"></view></view>
+      <scroll-view class="focus-sheet__scroll" scroll-y enhanced show-scrollbar="{{false}}">
+        <view class="focus-sheet__header">
+          <view>
+            <text class="focus-sheet__eyebrow">FOCUS MODE</text>
+            <view class="focus-sheet__title">沉浸学习</view>
+            <view class="focus-sheet__subtitle">选择喜欢的声音，让学习慢下来。</view>
+          </view>
+          <view class="focus-sheet__close" bindtap="closeFocusPanel" aria-label="关闭">×</view>
+        </view>
+
+        <view class="sound-grid">
+          <button
+            wx:for="{{ambientSoundCards}}"
+            wx:key="id"
+            class="sound-card {{item.selected ? 'sound-card--selected' : ''}} {{index === 4 ? 'sound-card--wide' : ''}}"
+            data-id="{{item.id}}"
+            bindtap="selectAmbientSound"
+          >
+            <view class="sound-card__icon">
+              <view class="sound-icon sound-icon--{{item.id}}">
+                <view class="sound-icon__stroke sound-icon__stroke--one"></view>
+                <view class="sound-icon__stroke sound-icon__stroke--two"></view>
+                <view class="sound-icon__stroke sound-icon__stroke--three"></view>
+              </view>
+            </view>
+            <view class="sound-card__copy">
+              <text class="sound-card__name">{{item.name}}</text>
+              <text class="sound-card__english">{{item.englishName}}</text>
+            </view>
+            <view wx:if="{{item.selected}}" class="sound-card__check">✓</view>
+          </button>
+        </view>
+
+        <view class="focus-control-card">
+          <view wx:if="{{ambientError}}" class="ambient-error">{{ambientError}}</view>
+          <view class="audio-actions">
+            <button class="audio-play" bindtap="toggleAmbientPlayback" loading="{{ambientLoading}}">{{ambientPlaying ? '暂停声音' : '播放声音'}}</button>
+            <button class="audio-off" bindtap="disableAmbientSound" disabled="{{ambientSoundId === 'off'}}">关闭环境音</button>
+          </view>
+        </view>
+
+        <view class="focus-toggle-list">
+          <view class="focus-toggle-row">
+            <view><text class="control-label">专注界面</text><text class="control-hint">弱化统计与动态提示</text></view>
+            <switch checked="{{focusEnabled}}" color="#287765" bindchange="handleFocusSwitch" />
+          </view>
+          <view class="focus-toggle-row">
+            <view><text class="control-label">游戏反馈音</text><text class="control-hint">为后续提示音保留的偏好</text></view>
+            <switch checked="{{feedbackSoundEnabled}}" color="#287765" bindchange="handleFeedbackSoundSwitch" />
+          </view>
+        </view>
+        <view class="focus-sheet__safe"></view>
+      </scroll-view>
+    </view>
+  </view>
+
+  <view wx:if="{{pauseVisible}}" class="pause-overlay">
+    <view class="pause-sheet">
+      <view class="pause-sheet__mark">Ⅱ</view>
+      <view class="pause-sheet__title type-dialog-title">先歇一会儿</view>
+      <view class="pause-sheet__desc type-body">本轮学习数据已保留，继续或保存退出都可以。</view>
+      <view class="pause-sheet__actions">
+        <button class="pause-sheet__primary button-base button-primary" bindtap="resumeGame">继续学习</button>
+        <button class="pause-sheet__secondary button-base button-secondary" bindtap="saveAndExit">保存并退出</button>
+      </view>
+    </view>
+  </view>
+
+  <view wx:if="{{pullHintVisible}}" class="dictionary-pull-hint {{pullHintReady ? 'dictionary-pull-hint--ready' : ''}}">{{pullHintReady ? '松开查词' : '继续下拉'}}</view>
+  <global-dictionary id="globalDictionary" avoid-capsule bindclose="closeDictionary" bindentryopen="openDictionary" />
+</view>

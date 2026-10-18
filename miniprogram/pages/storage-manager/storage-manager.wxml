@@ -1,0 +1,74 @@
+<view class="storage-page">
+  <view class="page-shell safe-bottom storage-shell">
+    <view class="storage-head">
+      <text class="type-page-title">存储空间管理</text>
+      <text class="type-body">管理 WordMatch 的本地数据和缓存文件</text>
+    </view>
+
+    <view wx:if="{{loading}}" class="state-card">
+      <view class="loading-ring"></view>
+      <text>正在统计本地数据…</text>
+    </view>
+
+    <block wx:else>
+      <view wx:if="{{errorText}}" class="notice notice--warning">{{errorText}}</view>
+
+      <view class="usage-card">
+        <view class="usage-card__top">
+          <view>
+            <text class="type-meta usage-card__label">STORAGE 已用容量</text>
+            <text class="usage-card__value">{{storageCurrentText}}</text>
+          </view>
+          <text class="usage-card__limit">上限 {{storageLimitText}}</text>
+        </view>
+        <view class="progress-track"><view class="progress-fill" style="width: {{overview.storagePercent}}%;"></view></view>
+        <view class="progress-copy"><text>已使用 {{overview.storagePercent}}%</text><text>微信 Storage 配额</text></view>
+        <view class="metric-grid">
+          <view class="metric"><text>{{localFileText}}</text><text>本地文件</text></view>
+          <view class="metric"><text>{{clearableText}}</text><text>可清理缓存</text></view>
+          <view class="metric"><text>{{importantText}}</text><text>重要数据</text></view>
+        </view>
+        <text class="usage-card__time">最近统计 {{calculatedAtText}}</text>
+      </view>
+
+      <view class="section-block">
+        <view class="section-heading"><text class="type-section-title">存储明细</text><text class="type-meta">按已确认用途分类</text></view>
+        <view class="detail-card">
+          <view wx:for="{{categories}}" wx:key="id" class="detail-row">
+            <view class="detail-row__mark detail-row__mark--{{item.kind}}"></view>
+            <view class="detail-row__copy"><text>{{item.label}}</text><text>{{item.note}}</text></view>
+            <text class="detail-row__size">{{item.sizeText}}</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="section-block">
+        <view class="section-heading"><text class="type-section-title">缓存清理</text><text class="type-meta">仅删除白名单内数据</text></view>
+        <view class="cleanup-list">
+          <view wx:for="{{cacheItems}}" wx:key="id" class="cleanup-row {{item.disabled || cleaning ? 'cleanup-row--disabled' : ''}}" data-type="{{item.id}}" bindtap="requestClear">
+            <view class="cleanup-row__copy"><text>{{item.label}}</text><text>{{item.description}}</text></view>
+            <view class="cleanup-row__action"><text>{{item.sizeText}}</text><text>{{item.disabled ? '暂无缓存' : '清理 ›'}}</text></view>
+          </view>
+        </view>
+        <button class="clear-all" disabled="{{cleaning || overview.clearableBytes === 0}}" bindtap="clearAll">{{cleaning ? '正在清理' : '清理可删除缓存'}}</button>
+      </view>
+
+      <view class="section-block">
+        <view class="section-heading"><text class="type-section-title">离线词典资源</text></view>
+        <view class="offline-card">
+          <view class="offline-card__icon">Aa</view>
+          <view><text>内置本地词库</text><text>随程序安装，当前没有用户下载的离线词典</text></view>
+          <text class="offline-card__tag">不可删除</text>
+        </view>
+      </view>
+
+      <view class="notice">
+        <text>普通缓存清理不会影响学习记录、错词本、闯关进度和个人词包。</text>
+        <text>小程序代码包、微信内部缓存、系统缓存和运行内存无法通过当前小程序 API 准确获取。</text>
+      </view>
+
+      <button class="refresh-button" disabled="{{cleaning}}" bindtap="refreshStorage">刷新存储统计</button>
+    </block>
+  </view>
+</view>
+<global-dictionary id="globalDictionary" />

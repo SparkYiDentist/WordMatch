@@ -1,0 +1,97 @@
+<view class="quiz-page">
+  <view class="quiz-top" style="padding-top: {{topInset}}px;">
+    <view class="quiz-top__side">
+      <button class="back-button" bindtap="openPause" aria-label="返回">‹</button>
+    </view>
+    <view class="quiz-top__center">
+      <text class="quiz-top__mode type-nav-title">单词四选一</text>
+      <text class="quiz-top__mode-sub">WORD QUIZ</text>
+    </view>
+    <view class="quiz-top__side quiz-top__side--end">
+      <button class="pause-button" bindtap="openPause">暂停</button>
+    </view>
+  </view>
+
+  <view wx:if="{{phase !== 'completed'}}" class="quiz-status">
+    <text>{{progressText}}</text><view class="status-dot"></view><text>首次正确率 {{accuracy}}%</text><view class="status-spacer"></view><text>{{durationText}}</text>
+  </view>
+
+  <view wx:if="{{phase !== 'completed'}}" class="quiz-scroll">
+    <view class="quiz-content">
+      <view wx:if="{{word}}" class="word-card {{phase === 'correct-feedback' ? 'word-card--success' : ''}}">
+        <text class="word-card__eyebrow">LOOK · THINK · CHOOSE</text>
+        <text class="word-card__word">{{word.english}}</text>
+        <view wx:if="{{word.phonetic || word.partOfSpeech}}" class="word-card__meta">
+          <text wx:if="{{word.phonetic}}">/{{word.phonetic}}/</text><text wx:if="{{word.partOfSpeech}}" class="pos-pill">{{word.partOfSpeech}}</text>
+        </view>
+      </view>
+
+      <text class="question-hint">选择最准确的中文释义</text>
+      <view class="option-list">
+        <view
+          wx:for="{{options}}"
+          wx:key="id"
+          class="quiz-option quiz-option--{{item.state}} {{item.state === 'wrong' || phase === 'explanation' || phase === 'correct-feedback' ? 'quiz-option--disabled' : ''}}"
+          data-id="{{item.id}}"
+          role="button"
+          aria-disabled="{{item.state === 'wrong' || phase === 'explanation' || phase === 'correct-feedback'}}"
+          bindtap="chooseOption"
+          hover-class="quiz-option--pressed"
+        >
+          <text class="quiz-option__label">{{item.label}}</text>
+          <text class="quiz-option__meaning">{{item.meaning}}</text>
+          <text wx:if="{{item.state === 'correct'}}" class="quiz-option__mark">✓</text>
+          <text wx:elif="{{item.state === 'wrong'}}" class="quiz-option__mark">×</text>
+        </view>
+      </view>
+      <view wx:if="{{phase === 'wrong-feedback'}}" class="feedback feedback--wrong">这个释义不太对，换一个再试试。已记入本题错误尝试。</view>
+
+      <view wx:if="{{phase === 'explanation' && entry}}" class="explanation">
+        <view class="explanation__head"><view><text class="explanation__eyebrow">WORD NOTES</text><text class="explanation__title">单词详解</text></view><view class="learned-badge">✓ 已掌握</view></view>
+        <view class="entry-lead">
+          <text class="entry-lead__word">{{entry.headword}}</text>
+          <view wx:if="{{entry.phoneticUK || entry.phoneticUS || entry.phonetic}}" class="phonetics">
+            <text wx:if="{{entry.phoneticUK}}">英 /{{entry.phoneticUK}}/</text>
+            <text wx:if="{{entry.phoneticUS}}">美 /{{entry.phoneticUS}}/</text>
+            <text wx:if="{{!entry.phoneticUK && !entry.phoneticUS && entry.phonetic}}">/{{entry.phonetic}}/</text>
+          </view>
+        </view>
+        <view wx:if="{{entry.senses.length}}" class="detail-block detail-block--primary">
+          <view wx:for="{{entry.senses}}" wx:key="index" class="sense">
+            <text wx:if="{{item.partOfSpeech}}" class="sense__pos">{{item.partOfSpeech}}</text>
+            <view class="sense__copy"><text class="sense__meaning">{{item.matchMeaning}}</text><text wx:if="{{item.fullMeaning && item.fullMeaning !== item.matchMeaning}}" class="sense__full">{{item.fullMeaning}}</text></view>
+          </view>
+        </view>
+        <view wx:if="{{entry.englishDefinition}}" class="detail-block"><text class="detail-label">英文释义</text><text class="english-definition">{{entry.englishDefinition}}</text></view>
+        <view wx:if="{{entry.examples && entry.examples.length}}" class="detail-block">
+          <text class="detail-label">双语例句</text>
+          <view wx:for="{{entry.examples}}" wx:key="index" class="example"><text class="example__en">{{item.english}}</text><text wx:if="{{item.chinese}}" class="example__zh">{{item.chinese}}</text></view>
+        </view>
+        <view wx:if="{{entry.collocations && entry.collocations.length}}" class="detail-block"><text class="detail-label">常见搭配</text><view class="chip-row"><text wx:for="{{entry.collocations}}" wx:key="*this" class="info-chip">{{item}}</text></view></view>
+        <view wx:if="{{(entry.synonyms && entry.synonyms.length) || (entry.antonyms && entry.antonyms.length)}}" class="detail-block">
+          <view wx:if="{{entry.synonyms && entry.synonyms.length}}" class="word-list"><text class="detail-label">近义词</text><text>{{synonymsText}}</text></view>
+          <view wx:if="{{entry.antonyms && entry.antonyms.length}}" class="word-list"><text class="detail-label">反义词</text><text>{{antonymsText}}</text></view>
+        </view>
+        <view wx:if="{{forms.length}}" class="detail-block"><text class="detail-label">词形变化</text><view class="forms"><view wx:for="{{forms}}" wx:key="label" class="form-row"><text>{{item.label}}</text><text>{{item.value}}</text></view></view></view>
+        <view wx:if="{{entry.morphology || entry.etymology}}" class="detail-block"><text class="detail-label">词根词缀</text><text wx:if="{{entry.morphology}}">{{entry.morphology}}</text><text wx:if="{{entry.etymology}}" class="etymology">{{entry.etymology}}</text></view>
+        <view wx:if="{{bookLabels.length}}" class="book-row"><text class="detail-label">所属词库</text><text wx:for="{{bookLabels}}" wx:key="*this" class="book-tag">{{item}}</text></view>
+        <view class="detail-actions"><button class="detail-action" bindtap="addToPack">{{savedToPack ? '✓ 已加入词包' : '＋ 加入我的词包'}}</button><button class="detail-action" bindtap="openFullDictionary">查看完整词典详情</button></view>
+      </view>
+      <view class="scroll-safe"></view>
+    </view>
+  </view>
+
+  <view wx:if="{{phase === 'explanation'}}" class="next-dock"><button class="next-button" bindtap="nextQuestion">{{targetCount && completedWords >= targetCount ? '查看学习结果' : '下一个单词'}} <text>→</text></button></view>
+
+  <view wx:if="{{phase === 'completed'}}" class="result-view page-shell safe-bottom">
+    <view class="result-mark">{{accuracy}}<text>%</text></view>
+    <text class="result-kicker">SESSION COMPLETE</text><text class="result-title">这一轮，认真读完了。</text>
+    <view class="result-grid"><view><text>{{completedWords}}</text><text>完成题数</text></view><view><text>{{resultFirstCorrect}}</text><text>首次答对</text></view><view><text>{{resultWrongCount}}</text><text>错误单词</text></view><view><text>{{durationText}}</text><text>学习时长</text></view></view>
+    <button wx:if="{{resultWrongCount}}" class="result-primary" bindtap="reviewWrongWords">复习本次错词</button><button class="result-secondary" bindtap="goHome">返回首页</button>
+  </view>
+
+  <view wx:if="{{pauseVisible}}" class="pause-backdrop">
+    <view class="pause-sheet"><view class="pause-sheet__handle"></view><text class="pause-sheet__kicker">PROGRESS SAVED</text><text class="pause-sheet__title">先停一下</text><text class="pause-sheet__desc">当前单词、选项顺序和答题状态已保存在本机。</text><button class="pause-primary" bindtap="resumeQuiz">继续学习</button><button class="pause-secondary" bindtap="exitQuiz">保存并退出</button></view>
+  </view>
+  <global-dictionary id="globalDictionary" avoid-capsule />
+</view>

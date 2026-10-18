@@ -1,0 +1,28 @@
+{
+  "name": "miniprogram-ts-quickstart",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "typecheck": "tsc --noEmit --pretty false",
+    "build:test": "tsc -p tsconfig.tests.json",
+    "test": "npm run build:test && node --test tests/*.test.js",
+    "vocab:import": "node scripts/import-vocabulary.mjs",
+    "vocab:compress": "node scripts/compress-vocabulary.mjs",
+    "audio:prepare": "npm run build:test && node scripts/prepare-word-audio.mjs",
+    "audio:generate": "python scripts/generate-kokoro-word-audio.py",
+    "package:size": "node scripts/check-package-size.mjs",
+    "style:audit": "node scripts/align-typography.mjs",
+    "style:fix": "node scripts/align-typography.mjs --fix",
+    "style:check": "node scripts/check-wxss.mjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "",
+  "dependencies": {
+    "pako": "^1.0.11"
+  },
+  "devDependencies": {
+    "miniprogram-api-typings": "^2.8.3-1",
+    "typescript": "^5.9.3"
+  }
+}

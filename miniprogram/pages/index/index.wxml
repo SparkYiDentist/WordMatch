@@ -1,0 +1,97 @@
+<view class="home">
+  <view class="page-shell home-shell safe-bottom">
+    <view class="hero">
+      <view class="hero__eyebrow type-eyebrow">DAILY WORD TRAINING</view>
+      <view class="hero__title-row">
+        <view>
+          <view class="hero__title type-brand">WordMatch</view>
+          <view class="hero__subtitle type-body">词碰词 · 看见就会，碰见就记住</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="daily-bar">
+      <view class="daily-bar__copy">
+        <text class="daily-bar__hello type-card-title">今天也要进步一点</text>
+        <text class="daily-bar__streak type-assistive">连续学习 {{checkInStreak}} 天</text>
+      </view>
+      <button class="check-in type-button {{checkedToday ? 'check-in--done' : ''}}" bindtap="handleCheckIn">
+        <text class="check-in__icon">{{checkedToday ? '✓' : '＋'}}</text>
+        <text>{{checkedToday ? '已签到' : '签到'}}</text>
+      </button>
+    </view>
+
+    <view class="mode-section">
+      <view class="section-title type-section-title">开始学习</view>
+      <view class="play-switch" role="radiogroup" aria-label="选择玩法">
+        <view class="play-switch__item {{playType === 'matching' ? 'play-switch__item--active' : ''}}" data-value="matching" bindtap="selectPlayType">
+          <text class="play-switch__name">配对消除</text><text class="play-switch__en">MATCHING</text>
+        </view>
+        <view class="play-switch__item {{playType === 'quiz' ? 'play-switch__item--active' : ''}}" data-value="quiz" bindtap="selectPlayType">
+          <text class="play-switch__name">单词四选一</text><text class="play-switch__en">WORD QUIZ</text>
+        </view>
+      </view>
+      <view class="mode-list">
+        <view class="mode-card mode-card--mint" hover-class="mode-card--pressed" bindtap="startEndless">
+          <view class="mode-card__icon">∞</view>
+          <view class="mode-card__copy">
+            <view class="mode-card__title type-card-title">无尽模式</view>
+            <view class="mode-card__desc type-body">{{playType === 'quiz' ? '看词选义，答对后精读详解' : '连续消除，保持记忆热度'}}</view>
+          </view>
+          <view class="mode-card__arrow">›</view>
+        </view>
+        <view class="mode-card mode-card--blue" hover-class="mode-card--pressed" bindtap="openLevels">
+          <view class="mode-card__icon">♛</view>
+          <view class="mode-card__copy">
+            <view class="mode-card__title type-card-title">闯关模式</view>
+            <view class="mode-card__desc type-body">每关 20 词，挑战三星成绩</view>
+          </view>
+          <view class="mode-card__arrow">›</view>
+        </view>
+        <view class="mode-card mode-card--sand" hover-class="mode-card--pressed" bindtap="openCustom">
+          <view class="mode-card__icon">▤</view>
+          <view class="mode-card__copy">
+            <view class="mode-card__title type-card-title">自选模式</view>
+            <view class="mode-card__desc type-body">按词库、范围和数量训练</view>
+          </view>
+          <view class="mode-card__arrow">›</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="learning-footer">
+      <view class="section-label type-section-title">学习足迹</view>
+      <view class="stats-card">
+        <view class="stat-item" hover-class="stat-item--pressed" bindtap="openTodayWords">
+          <text class="stat-item__number type-stat">{{todayCount}}</text>
+          <text class="stat-item__label type-assistive">今日完成 ›</text>
+        </view>
+        <view class="stat-divider"></view>
+        <view class="stat-item" hover-class="stat-item--pressed" bindtap="openLearnedWords">
+          <text class="stat-item__number type-stat">{{learnedCount}}</text>
+          <text class="stat-item__label type-assistive">累计单词 ›</text>
+        </view>
+        <view class="stat-divider"></view>
+        <view class="stat-item" hover-class="stat-item--pressed" bindtap="openVocabulary">
+          <text class="stat-item__number type-stat stat-item__number--coral">{{wrongCount}}</text>
+          <text class="stat-item__label type-assistive">错词本 ›</text>
+        </view>
+      </view>
+      <view class="learning-stats-entry" hover-class="learning-stats-entry--pressed" bindtap="openLearningStats">
+        <view class="learning-stats-entry__icon">▦</view>
+        <view class="learning-stats-entry__copy">
+          <text class="type-card-title">查看学习统计</text>
+          <text class="type-assistive">日历、趋势与学习构成</text>
+        </view>
+        <text class="learning-stats-entry__arrow">›</text>
+      </view>
+    </view>
+
+    <view class="settings-entry" hover-class="settings-entry--pressed" bindtap="openSettings">
+      <text class="settings-entry__icon">⌁</text>
+      <text class="type-body">设置</text>
+      <text class="settings-entry__arrow">›</text>
+    </view>
+  </view>
+</view>
+<global-dictionary id="globalDictionary" avoid-capsule />

@@ -1,0 +1,10 @@
+{
+  "navigationBarTitleText": "学习日历与统计",
+  "navigationBarBackgroundColor": "#f4faf7",
+  "navigationBarTextStyle": "black",
+  "usingComponents": {
+    "global-dictionary": "/components/global-dictionary/global-dictionary"
+  },
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "dark"
+}
