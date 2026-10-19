@@ -2,6 +2,7 @@ import { createBalancedAnswerOrder, firstTryAccuracy, generateQuizQuestion, Quiz
 import { LEVEL_WORD_COUNT } from '../../engine/modes'
 import { BookId, GameMode, SessionStats, Word } from '../../engine/types'
 import { ambientAudioService } from '../../services/ambient-audio-service'
+import { wordAudioService } from '../../services/word-audio-service'
 import { DictionaryEntry, DictionaryWordForms } from '../../services/dictionary-types'
 import { getDictionaryEntry } from '../../services/dictionary-service'
 import {
@@ -145,6 +146,7 @@ Page({
     resultFirstCorrect: 0,
     savedToPack: false,
     dictionaryRefreshing: false,
+    pronunciationLoading: false,
   },
 
   onLoad(queryParams: Record<string, string | undefined>) {
@@ -174,6 +176,7 @@ Page({
 
   onHide() {
     this.commitActiveTime()
+    wordAudioService.stop()
     ambientAudioService.pause()
     this.saveDraft()
   },
@@ -182,6 +185,7 @@ Page({
     this.commitActiveTime()
     this.stopTimer()
     ambientAudioService.destroy()
+    wordAudioService.stop()
     this.saveDraft()
   },
 
@@ -350,6 +354,16 @@ Page({
       return
     }
     this.loadNextQuestion()
+  },
+
+  playCurrentWord() {
+    const currentWord = this.data.word as Word | null
+    if (!currentWord || this.data.pronunciationLoading) return
+    this.setData({ pronunciationLoading: true })
+    wordAudioService.play(currentWord.english).then(started => {
+      this.setData({ pronunciationLoading: false })
+      if (!started) wx.showToast({ title: '该词发音暂不可用', icon: 'none' })
+    })
   },
 
   completeSession() {

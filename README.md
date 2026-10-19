@@ -24,6 +24,12 @@ https://raw.githubusercontent.com
 
 缓存文件位于小程序的 `wordmatch-cache/audio` 目录，可在应用的存储管理页面清理。音频来源和许可证见 [SOUND_LICENSES.md](./SOUND_LICENSES.md)。
 
+## 单词发音
+
+7,481 个本地词库词条的发音文件托管在 `remote-assets/word-audio`，不会进入小程序上传包。配对模式点击英文卡片，或在四选一、词典详情点击“发音”时，小程序才会下载对应 MP3；之后从 `wordmatch-cache/audio/words-v1` 读取本地缓存。
+
+发音文件使用标准化英文的 SHA-256 前 24 位作为稳定路径，不需要下载整份远程索引。用户自行导入且尚未生成语音的词条会提示发音暂不可用，不影响词包和答题流程。
+
 ## 词库
 
 运行时使用无损压缩词库 `miniprogram/data/vocabulary/generated-compressed-data.ts`。重建方式见 [scripts/README.md](./scripts/README.md)。

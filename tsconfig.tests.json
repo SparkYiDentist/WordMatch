@@ -19,6 +19,7 @@
     "miniprogram/services/search-history-service.ts",
     "miniprogram/services/dictionary-service.ts",
     "miniprogram/services/dictionary-types.ts",
+    "miniprogram/services/word-audio-service.ts",
     "miniprogram/components/global-dictionary/global-dictionary.ts"
   ]
 }

@@ -63,7 +63,9 @@
 .detail-scroll { background: linear-gradient(180deg, #e7f4ee 0, #f4faf7 410rpx); }
 .detail-hero { padding: 34rpx 24rpx 30rpx; display: flex; flex-direction: column; align-items: flex-start; }
 .detail-back { margin: 0 0 34rpx; padding: 8rpx 16rpx; border-radius: 999rpx; background: rgba(255,255,255,.68); color: #4b7066; font-size: 24rpx; line-height: 1.4; }
-.detail-word { max-width: 100%; font-family: "Helvetica Neue", Arial, sans-serif; font-size: 44rpx; font-weight: 700; line-height: 1.2; overflow-wrap: anywhere; }
+.detail-word-row { width: 100%; display: flex; align-items: center; gap: 16rpx; }
+.detail-word { min-width: 0; max-width: 100%; font-family: "Helvetica Neue", Arial, sans-serif; font-size: 44rpx; font-weight: 700; line-height: 1.2; overflow-wrap: anywhere; }
+.detail-pronunciation { flex: 0 0 auto; min-width: 96rpx; min-height: 62rpx; margin: 0; padding: 8rpx 16rpx; border-radius: 999rpx; background: rgba(255,255,255,.82); color: #286b5a; font-size: 22rpx; font-weight: 600; line-height: 1.4; }
 .phonetic-row { margin-top: 12rpx; color: #5b7c73; font-family: "Helvetica Neue", Arial, sans-serif; font-size: 24rpx; }
 .detail-card { margin: 0 24rpx 18rpx; padding: 28rpx; border: 1rpx solid rgba(23, 79, 69, .08); border-radius: 28rpx; background: rgba(255,255,255,.96); box-shadow: 0 10rpx 28rpx rgba(25, 63, 54, .055); }
 .detail-card__eyebrow { display: block; margin-bottom: 18rpx; color: #718d85; font-size: 22rpx; font-weight: 600; letter-spacing: 2rpx; }

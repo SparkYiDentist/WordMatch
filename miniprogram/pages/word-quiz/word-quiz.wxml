@@ -20,7 +20,10 @@
     <view class="quiz-content">
       <view wx:if="{{word}}" class="word-card {{phase === 'correct-feedback' ? 'word-card--success' : ''}}">
         <text class="word-card__eyebrow">LOOK · THINK · CHOOSE</text>
-        <text class="word-card__word">{{word.english}}</text>
+        <view class="word-card__headword-row">
+          <text class="word-card__word">{{word.english}}</text>
+          <button class="pronunciation-button" bindtap="playCurrentWord" loading="{{pronunciationLoading}}" disabled="{{pronunciationLoading}}" aria-label="播放 {{word.english}} 的发音">发音</button>
+        </view>
         <view wx:if="{{word.phonetic || word.partOfSpeech}}" class="word-card__meta">
           <text wx:if="{{word.phonetic}}">/{{word.phonetic}}/</text><text wx:if="{{word.partOfSpeech}}" class="pos-pill">{{word.partOfSpeech}}</text>
         </view>

@@ -26,6 +26,7 @@ import {
   AmbientSoundId,
   ambientAudioService,
 } from '../../services/ambient-audio-service'
+import { wordAudioService } from '../../services/word-audio-service'
 import {
   getPersonalPackAvailableWords,
   getPersonalWordPack,
@@ -157,6 +158,7 @@ Page<GamePageData, {
   initializeGame(query: Record<string, string | undefined>): void
   takeNextWords(count: number, current: Word[]): Word[]
   handleCardTap(event: WechatMiniprogram.CustomEvent<CardTapDetail>): void
+  playPronunciation(word: Word): void
   judgeSelection(): void
   updateStatsData(feedback?: string): void
   finishCorrectMatch(leftIndex: number, rightIndex: number): void
@@ -244,6 +246,7 @@ Page<GamePageData, {
     if (sheetDismissTimer !== null) clearTimeout(sheetDismissTimer)
     ambientAudioService.setListener(null)
     ambientAudioService.destroy()
+    wordAudioService.stop()
     if (!sessionSaved && session && (session.pairAttempts > 0 || session.completedWords > 0)) {
       saveSessionOnce(sessionWithActiveDuration())
       sessionSaved = true
@@ -259,6 +262,7 @@ Page<GamePageData, {
   onHide() {
     if (!pausedAt) hiddenAt = Date.now()
     lastStudyActivityAt = 0
+    wordAudioService.stop()
     if (config && config.mode === 'endless') {
       ambientWasPlayingBeforePause = false
       ambientAudioService.pause()
@@ -421,6 +425,8 @@ Page<GamePageData, {
     const slots = side === 'english' ? this.data.leftCards : this.data.rightCards
     const result = selectCard(selection, side, index, slots, this.data.interactionLocked)
     if (result.ignored) return
+    const tappedWord = slots[index]?.word
+    if (side === 'english' && tappedWord) this.playPronunciation(tappedWord)
     selection = result.selection
     this.setData({
       leftCards: withSelectedStates(this.data.leftCards, selection.englishIndex),
@@ -428,6 +434,12 @@ Page<GamePageData, {
       feedback: result.readyToJudge ? '正在判断…' : '再选一张对应卡片',
     })
     if (result.readyToJudge) this.judgeSelection()
+  },
+
+  playPronunciation(word) {
+    wordAudioService.play(word.english).then(started => {
+      if (!started) wx.showToast({ title: '该词发音暂不可用', icon: 'none' })
+    })
   },
 
   judgeSelection() {

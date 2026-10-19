@@ -91,7 +91,10 @@
     <scroll-view wx:else class="dictionary-content detail-scroll" scroll-y enhanced show-scrollbar="{{false}}">
       <view class="detail-hero">
         <button class="detail-back" bindtap="goBack">‹ 返回结果</button>
-        <text class="detail-word">{{selectedEntry.headword}}</text>
+        <view class="detail-word-row">
+          <text class="detail-word">{{selectedEntry.headword}}</text>
+          <button class="detail-pronunciation" bindtap="playPronunciation" loading="{{pronunciationLoading}}" disabled="{{pronunciationLoading}}" aria-label="播放 {{selectedEntry.headword}} 的发音">发音</button>
+        </view>
         <view wx:if="{{selectedEntry.phonetic}}" class="phonetic-row"><text>/ {{selectedEntry.phonetic}} /</text></view>
       </view>
 

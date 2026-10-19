@@ -13,6 +13,7 @@ import {
   removeSearchHistory,
 } from '../../services/search-history-service'
 import { releaseDictionaryIndex, searchDictionaryIndex } from '../../services/search-index-service'
+import { wordAudioService } from '../../services/word-audio-service'
 
 const debounceTimers = new WeakMap<object, number>()
 
@@ -33,6 +34,7 @@ Component({
     searching: false,
     packSheetVisible: false,
     packs: [] as PersonalWordPackSummary[],
+    pronunciationLoading: false,
   },
   lifetimes: {
     attached() {
@@ -47,6 +49,7 @@ Component({
       const timer = debounceTimers.get(this)
       if (timer !== undefined) clearTimeout(timer)
       debounceTimers.delete(this)
+      wordAudioService.stop()
     },
   },
   methods: {
@@ -77,6 +80,7 @@ Component({
         return
       }
       if (this.data.selectedEntry) {
+        wordAudioService.stop()
         this.setData({ selectedEntry: null, focusInput: true })
         return
       }
@@ -97,6 +101,7 @@ Component({
         packSheetVisible: false,
       })
       releaseDictionaryIndex()
+      wordAudioService.stop()
       this.triggerEvent('close')
     },
     close() {
@@ -180,6 +185,15 @@ Component({
         selectedEntry: entry,
         focusInput: false,
         history: addSearchHistory(this.data.query || entry.headword),
+      })
+    },
+    playPronunciation() {
+      const entry = this.data.selectedEntry
+      if (!entry || this.data.pronunciationLoading) return
+      this.setData({ pronunciationLoading: true })
+      wordAudioService.play(entry.headword).then(started => {
+        this.setData({ pronunciationLoading: false })
+        if (!started) wx.showToast({ title: '该词发音暂不可用', icon: 'none' })
       })
     },
     showPackSheet() {

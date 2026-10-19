@@ -15,7 +15,9 @@
 .word-card { min-height: 236rpx; padding: 38rpx 28rpx; border: 2rpx solid #e4eee9; border-radius: 32rpx; background: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 12rpx 34rpx rgba(31,91,76,.07); transition: border-color 180ms ease, transform 180ms ease; }
 .word-card--success { border-color: #9ed8c6; transform: translateY(-2rpx); }
 .word-card__eyebrow { color: #80a198; font-size: 18rpx; font-weight: 700; letter-spacing: 3rpx; }
-.word-card__word { margin-top: 18rpx; color: #173f36; font-family: "Helvetica Neue", Arial, sans-serif; font-size: 52rpx; font-weight: 600; line-height: 1.2; text-align: center; overflow-wrap: anywhere; }
+.word-card__headword-row { max-width: 100%; margin-top: 18rpx; display: flex; align-items: center; justify-content: center; gap: 14rpx; }
+.word-card__word { min-width: 0; color: #173f36; font-family: "Helvetica Neue", Arial, sans-serif; font-size: 52rpx; font-weight: 600; line-height: 1.2; text-align: center; overflow-wrap: anywhere; }
+.pronunciation-button { flex: 0 0 auto; min-width: 92rpx; min-height: 58rpx; margin: 0; padding: 8rpx 16rpx; border-radius: 999rpx; background: #e3f0eb; color: #2c6c5d; font-size: 22rpx; font-weight: 600; line-height: 1.4; }
 .word-card__meta { margin-top: 14rpx; display: flex; align-items: center; gap: 14rpx; color: #718d85; font-size: 24rpx; }.pos-pill { padding: 3rpx 12rpx; border-radius: 999rpx; background: #eaf5f0; color: #367b69; font-size: 20rpx; }
 .question-hint { display: block; margin: 30rpx 4rpx 16rpx; color: #496d63; font-size: 26rpx; }
 .option-list { width: 100%; max-width: none; align-self: stretch; display: flex; flex-direction: column; gap: 16rpx; }
