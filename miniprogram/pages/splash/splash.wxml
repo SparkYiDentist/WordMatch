@@ -1,5 +1,5 @@
 <view class="splash {{leaving ? 'splash--leaving' : ''}}">
-  <image class="splash__image" src="/assets/splash-morning-compact.jpg" mode="aspectFill" />
+  <image class="splash__image" src="{{coverSrc}}" mode="aspectFill" />
   <view class="splash__shade"></view>
 
   <view class="splash__brand-lockup">
