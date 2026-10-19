@@ -6,11 +6,11 @@
 
 | WordMatch 文件 | 界面名称 | 原始作品与作者 | 原始来源 | 许可证 | 本项目中的处理 |
 |---|---|---|---|---|---|
-| `remote-assets/ambient/rain.mp3` | 轻柔雨声 Rain | Rain on Window Reverberant — Silencyo | [Freesound 81818](https://freesound.org/s/81818/) | [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/) | 从本地归档原件截取 30 秒并转为低码率单声道 MP3，首次使用时下载并缓存 |
-| `remote-assets/ambient/forest.mp3` | 森林晨光 Forest | Birds singing, Dawn chorus — SamsterBirdies | [Freesound 578523](https://freesound.org/s/578523/) | [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/) | 从本地归档原件截取 30 秒并转为低码率单声道 MP3，首次使用时下载并缓存 |
-| `remote-assets/ambient/ocean.mp3` | 海浪轻拍 Ocean | oceanwaves-10 (Point Reyes loop) — Rmutt | [Freesound 156598](https://freesound.org/s/156598/) | [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/) | 从本地归档原件截取 30 秒并转为低码率单声道 MP3，首次使用时下载并缓存 |
-| `remote-assets/ambient/stream.mp3` | 山间溪流 Stream | G53-19a Brook or Creek — USC / Internet Archive | [GOLD_TAPE_53_54_Water](https://archive.org/details/GOLD_TAPE_53_54_Water) | CC0 / Public Domain | 从本地归档原件截取 30 秒并转为低码率单声道 MP3，首次使用时下载并缓存 |
-| `remote-assets/ambient/white-noise.mp3` | 柔和白噪音 White Noise | WordMatch 确定性伪随机生成 | `scripts/generate-white-noise.mjs` | 项目自生成，无第三方音频权利负担 | 由项目生成的 WAV 原件转为低码率单声道 MP3，首次使用时下载并缓存 |
+| `remote-assets/ambient/rain.mp3` | 轻柔雨声 Rain | Rain on Window Reverberant — Silencyo | [Freesound 81818](https://freesound.org/s/81818/) | [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/) | 使用本地归档的原始高质量 MP3，首次使用时下载并缓存 |
+| `remote-assets/ambient/forest.mp3` | 森林晨光 Forest | Birds singing, Dawn chorus — SamsterBirdies | [Freesound 578523](https://freesound.org/s/578523/) | [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/) | 使用本地归档的原始高质量 MP3，首次使用时下载并缓存 |
+| `remote-assets/ambient/ocean.mp3` | 海浪轻拍 Ocean | oceanwaves-10 (Point Reyes loop) — Rmutt | [Freesound 156598](https://freesound.org/s/156598/) | [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/) | 使用本地归档的原始高质量 MP3，首次使用时下载并缓存 |
+| `remote-assets/ambient/stream.mp3` | 山间溪流 Stream | G53-19a Brook or Creek — USC / Internet Archive | [GOLD_TAPE_53_54_Water](https://archive.org/details/GOLD_TAPE_53_54_Water) | CC0 / Public Domain | 使用本地归档的原始高质量 MP3，首次使用时下载并缓存 |
+| `remote-assets/ambient/white-noise.wav` | 柔和白噪音 White Noise | WordMatch 确定性伪随机生成 | `scripts/generate-white-noise.mjs` | 项目自生成，无第三方音频权利负担 | 使用项目生成的原始 WAV，首次使用时下载并缓存 |
 
 前四个文件取自 [twtrubiks/moonseal 的逐文件音频清单](https://github.com/twtrubiks/moonseal/blob/main/public/audio/README.md)。该仓库已将来源、许可证和循环处理步骤逐项对应；本项目保留这些对应关系，不依据代码仓库许可证推断音频许可证。
 

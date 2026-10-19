@@ -4,6 +4,7 @@ export interface AmbientSoundOption {
   id: Exclude<AmbientSoundId, 'off'>
   name: string
   englishName: string
+  fileName: string
   remoteUrl: string
 }
 
@@ -19,16 +20,16 @@ type StateListener = (state: AmbientAudioState) => void
 type AmbientSoundFileId = Exclude<AmbientSoundId, 'off'>
 
 const AMBIENT_ASSET_BASE_URL = 'https://raw.githubusercontent.com/SparkYiDentist/WordMatch/main/remote-assets/ambient'
-const AMBIENT_CACHE_VERSION = 'v1'
+const AMBIENT_CACHE_VERSION = 'v2'
 const ambientCacheDirectory = (): string => `${wx.env.USER_DATA_PATH}/wordmatch-cache/audio/ambient-${AMBIENT_CACHE_VERSION}`
-const ambientCachePath = (soundId: AmbientSoundFileId): string => `${ambientCacheDirectory()}/${soundId}.mp3`
+const ambientCachePath = (option: AmbientSoundOption): string => `${ambientCacheDirectory()}/${option.fileName}`
 
 export const AMBIENT_SOUND_OPTIONS: readonly AmbientSoundOption[] = [
-  { id: 'rain', name: '轻柔雨声', englishName: 'Rain', remoteUrl: `${AMBIENT_ASSET_BASE_URL}/rain.mp3` },
-  { id: 'forest', name: '森林晨光', englishName: 'Forest', remoteUrl: `${AMBIENT_ASSET_BASE_URL}/forest.mp3` },
-  { id: 'ocean', name: '海浪轻拍', englishName: 'Ocean', remoteUrl: `${AMBIENT_ASSET_BASE_URL}/ocean.mp3` },
-  { id: 'stream', name: '山间溪流', englishName: 'Stream', remoteUrl: `${AMBIENT_ASSET_BASE_URL}/stream.mp3` },
-  { id: 'white-noise', name: '柔和白噪音', englishName: 'White Noise', remoteUrl: `${AMBIENT_ASSET_BASE_URL}/white-noise.mp3` },
+  { id: 'rain', name: '轻柔雨声', englishName: 'Rain', fileName: 'rain.mp3', remoteUrl: `${AMBIENT_ASSET_BASE_URL}/rain.mp3` },
+  { id: 'forest', name: '森林晨光', englishName: 'Forest', fileName: 'forest.mp3', remoteUrl: `${AMBIENT_ASSET_BASE_URL}/forest.mp3` },
+  { id: 'ocean', name: '海浪轻拍', englishName: 'Ocean', fileName: 'ocean.mp3', remoteUrl: `${AMBIENT_ASSET_BASE_URL}/ocean.mp3` },
+  { id: 'stream', name: '山间溪流', englishName: 'Stream', fileName: 'stream.mp3', remoteUrl: `${AMBIENT_ASSET_BASE_URL}/stream.mp3` },
+  { id: 'white-noise', name: '柔和白噪音', englishName: 'White Noise', fileName: 'white-noise.wav', remoteUrl: `${AMBIENT_ASSET_BASE_URL}/white-noise.wav` },
 ]
 
 const optionById = (soundId: AmbientSoundId): AmbientSoundOption | undefined => (
@@ -67,7 +68,7 @@ const downloadAmbientSound = (option: AmbientSoundOption): Promise<string> => {
   const existing = pendingDownloads[option.id]
   if (existing) return existing
 
-  const destination = ambientCachePath(option.id)
+  const destination = ambientCachePath(option)
   const download = new Promise<string>((resolve, reject) => {
     try {
       ensureCacheDirectory()
@@ -98,7 +99,7 @@ const downloadAmbientSound = (option: AmbientSoundOption): Promise<string> => {
 }
 
 const resolveAmbientSource = async (option: AmbientSoundOption): Promise<string> => {
-  const destination = ambientCachePath(option.id)
+  const destination = ambientCachePath(option)
   if (cachedFileExists(destination)) return destination
   return downloadAmbientSound(option)
 }
